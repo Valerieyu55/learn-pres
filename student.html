@@ -617,10 +617,7 @@
                             card.className = 'presentation-card';
                             const catStr = p.category && p.category !== '未分類' ? `<span style="display:inline-block; font-size:0.7rem; background:rgba(168,184,160,0.15); color:#66735e; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(168,184,160,0.3); vertical-align:middle; font-weight:700;">${p.category}</span>` : '';
                             
-                            const mockP = mockPresentations.find(m => m.id === p.id);
-                            const isTopicModified = mockP && mockP.topic !== p.topic;
-                            const topicStyle = isTopicModified ? 'color: #D97706; font-weight: 800; background: #FEF3C7; padding: 2px 4px; border-radius: 4px; border: 1px solid #FDE68A;' : '';
-                            const displayTopic = `<span style="${topicStyle}">${p.topic}</span>`;
+                            const displayTopic = `<span>${p.topic}</span>`;
 
                             let extraContent = '';
                             if (p.status === 'completed') {

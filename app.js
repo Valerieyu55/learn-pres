@@ -259,10 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const recommendBtnStyle = p.isRecommended ? 'color: #F59E0B; background-color: #FEF3C7; border: 1px solid #FDE68A;' : 'color: var(--text-muted); background-color: transparent; border: 1px solid var(--border);';
         const recommendBtnText = p.isRecommended ? '已推薦' : '推薦';
         
-        const mockP = mockPresentations.find(m => m.id === p.id);
-        const isTopicModified = mockP && mockP.topic !== p.topic;
-        const topicStyle = isTopicModified ? 'color: #D97706; font-weight: 800; background: #FEF3C7; padding: 2px 4px; border-radius: 4px; border: 1px solid #FDE68A;' : '';
-        const displayTopic = `<span style="${topicStyle}">${p.topic}</span>`;
+        const displayTopic = `<span>${p.topic}</span>`;
 
         div.innerHTML = `
             <div class="card-title">
