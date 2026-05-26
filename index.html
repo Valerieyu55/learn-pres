@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高一自主學習發表成果管理系統</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- 1. 左側側邊欄 -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <i class="fa-solid fa-school brand-icon"></i>
+                <div class="brand-text">
+                    <h2>自主學習管理</h2>
+                    <span>G10 Project Manager</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-view="kanban-view">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>排程與發表看板</span>
+                </button>
+                <button class="nav-item" data-view="feedback-view">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    <span>學生回饋成果</span>
+                </button>
+                <button class="nav-item" data-view="submission-view">
+                    <i class="fa-solid fa-clipboard-user"></i>
+                    <span>繳交狀況統計</span>
+                </button>
+                <button class="nav-item" data-view="rule-view">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>課堂回饋規則</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
+                <button id="btn-import-csv" class="footer-btn">
+                    <i class="fa-solid fa-file-import"></i> <span>匯入學生 CSV</span>
+                </button>
+                <button id="btn-export-csv" class="footer-btn">
+                    <i class="fa-solid fa-file-export"></i> <span>匯出為 Excel</span>
+                </button>
+                <button id="btn-reset" class="footer-btn text-danger">
+                    <i class="fa-solid fa-rotate-left"></i> <span>重置系統資料</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- 主體內容區 (上方標題 + 老師儀表板 + 看板) -->
+        <div class="main-container">
+            <!-- 2. 上方系統標題 -->
+            <header class="top-header">
+                <div class="header-title" style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="sidebar-toggle" style="background: none; border: none; font-size: 1.25rem; color: var(--primary); cursor: pointer; display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='var(--border)'" onmouseout="this.style.background='none'"><i class="fa-solid fa-bars"></i></button>
+                    <div>
+                        <h1 style="margin-bottom: 0;">自主學習成果發表與回饋系統</h1>
+                        <p style="margin-top: 4px;">管理學生之發表時段、評語登錄與學生即時互評</p>
+                    </div>
+                </div>
+                <div class="class-selector">
+                    <span class="user-role"><i class="fa-solid fa-user-tie"></i> 升學輔導教師</span>
+                </div>
+            </header>
+
+            <!-- 主工作區 -->
+            <div class="workspace">
+                <!-- 頁面 1: 看板與統計儀表板 -->
+                <div id="kanban-view" class="view-panel active">
+                    <!-- 3. 老師端儀表板 (統計卡片) -->
+                    <section class="teacher-dashboard">
+                        <div class="stat-card">
+                            <div class="stat-icon info"><i class="fa-solid fa-users"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">總發表組數</span>
+                                <span class="stat-value" id="stat-total">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon success"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">已完成發表</span>
+                                <span class="stat-value" id="stat-completed">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon pending"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">待發表組數</span>
+                                <span class="stat-value" id="stat-pending">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">延誤/備用</span>
+                                <span class="stat-value" id="stat-delayed">0</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 搜尋列與操作 -->
+                    <div class="search-container" style="margin-top: 0.5rem; margin-bottom: 0.5rem; flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem;">
+                        <h2 style="font-size: 1.1rem; color: var(--primary); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <i class="fa-solid fa-layer-group"></i> 四堂課排程看板
+                            <div style="display: flex; gap: 0.3rem; margin-left: 0.5rem;">
+                                <button id="btn-undo" style="padding: 0.2rem 0.5rem; border: 1px solid var(--border); background: var(--surface); border-radius: 4px; cursor: not-allowed; color: #D1D5DB; font-size: 0.8rem; transition: all 0.2s;" disabled title="上一步"><i class="fa-solid fa-rotate-left"></i> 復原</button>
+                                <button id="btn-redo" style="padding: 0.2rem 0.5rem; border: 1px solid var(--border); background: var(--surface); border-radius: 4px; cursor: not-allowed; color: #D1D5DB; font-size: 0.8rem; transition: all 0.2s;" disabled title="下一步"><i class="fa-solid fa-rotate-right"></i> 重做</button>
+                            </div>
+                        </h2>
+                        <div style="position: relative; width: 100%; max-width: 300px;">
+                            <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+                            <input type="text" id="kanban-search" placeholder="搜尋學生姓名或主題..." style="width: 100%; padding: 0.6rem 1rem 0.6rem 2.5rem; border: 1px solid var(--border); border-radius: 20px; outline: none; background: var(--surface); color: var(--primary); box-shadow: var(--shadow-sm); font-size: 0.95rem; transition: border-color 0.2s;">
+                        </div>
+                    </div>
+
+                    <!-- 4. 四堂課排程看板 -->
+                    <section class="kanban-section">
+                        <div class="kanban-board">
+                            <!-- 場次 1 -->
+                            <div class="kanban-column" data-session="1">
+                                <div class="column-header" style="flex-wrap: wrap; gap: 8px;">
+                                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                        <div class="column-title" style="margin-bottom: 0;">
+                                            <span class="session-badge">Session 1</span>
+                                            <h3>第一節 (45分)</h3>
+                                        </div>
+                                        <span class="count-badge">0</span>
+                                    </div>
+                                    <div style="width: 100%; display: flex; gap: 4px;">
+                                        <input type="date" class="session-date-input" data-session="1" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
+                                        <input type="text" class="session-loc-input" data-session="1" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                    </div>
+                                </div>
+                                <div class="column-body drag-container"></div>
+                            </div>
+                            <!-- 場次 2 -->
+                            <div class="kanban-column" data-session="2">
+                                <div class="column-header" style="flex-wrap: wrap; gap: 8px;">
+                                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                        <div class="column-title" style="margin-bottom: 0;">
+                                            <span class="session-badge">Session 2</span>
+                                            <h3>第二節 (45分)</h3>
+                                        </div>
+                                        <span class="count-badge">0</span>
+                                    </div>
+                                    <div style="width: 100%; display: flex; gap: 4px;">
+                                        <input type="date" class="session-date-input" data-session="2" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
+                                        <input type="text" class="session-loc-input" data-session="2" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                    </div>
+                                </div>
+                                <div class="column-body drag-container"></div>
+                            </div>
+                            <!-- 場次 3 -->
+                            <div class="kanban-column" data-session="3">
+                                <div class="column-header" style="flex-wrap: wrap; gap: 8px;">
+                                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                        <div class="column-title" style="margin-bottom: 0;">
+                                            <span class="session-badge">Session 3</span>
+                                            <h3>第三節 (45分)</h3>
+                                        </div>
+                                        <span class="count-badge">0</span>
+                                    </div>
+                                    <div style="width: 100%; display: flex; gap: 4px;">
+                                        <input type="date" class="session-date-input" data-session="3" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
+                                        <input type="text" class="session-loc-input" data-session="3" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                    </div>
+                                </div>
+                                <div class="column-body drag-container"></div>
+                            </div>
+                            <!-- 場次 4 -->
+                            <div class="kanban-column" data-session="4">
+                                <div class="column-header" style="flex-wrap: wrap; gap: 8px;">
+                                    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                                        <div class="column-title" style="margin-bottom: 0;">
+                                            <span class="session-badge">Session 4</span>
+                                            <h3>第四節 (45分)</h3>
+                                        </div>
+                                        <span class="count-badge">0</span>
+                                    </div>
+                                    <div style="width: 100%; display: flex; gap: 4px;">
+                                        <input type="date" class="session-date-input" data-session="4" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
+                                        <input type="text" class="session-loc-input" data-session="4" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                    </div>
+                                </div>
+                                <div class="column-body drag-container"></div>
+                            </div>
+                            
+                            <!-- 備用/延誤區 -->
+                            <div class="kanban-column backup-column" data-session="0">
+                                <div class="column-header">
+                                    <div class="column-title" style="flex-wrap: wrap; gap: 4px;">
+                                        <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
+                                            <span class="session-badge warning">Backup</span>
+                                            <h3>備用/延誤區</h3>
+                                        </div>
+                                        <select id="backup-class-select" style="padding: 4px 6px; border: 1px solid var(--border); border-radius: 4px; outline: none; font-size: 0.85rem; width: 100%; color: var(--text-dark); background-color: var(--surface);">
+                                            <option value="all">所有班級</option>
+                                        </select>
+                                    </div>
+                                    <span class="count-badge">0</span>
+                                </div>
+                                <div class="column-body drag-container"></div>
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+
+                <!-- 頁面 2: 學生回饋列表 -->
+                <div id="feedback-view" class="view-panel">
+                    <div class="panel-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div>
+                            <h2>學生學習回饋總覽</h2>
+                            <p>此處顯示所有同學提交的 MVP 回饋紀錄，可用於評估課堂參與表現。</p>
+                        </div>
+                        <select id="teacher-wall-session-filter" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--primary); font-weight: bold; outline: none; cursor: pointer;">
+                            <option value="all">顯示所有堂次</option>
+                            <option value="1">只顯示第一節課</option>
+                            <option value="2">只顯示第二節課</option>
+                            <option value="3">只顯示第三節課</option>
+                            <option value="4">只顯示第四節課</option>
+                        </select>
+                    </div>
+                    <div class="feedback-grid" id="teacher-feedback-grid">
+                        <!-- Feedbacks render here -->
+                    </div>
+                </div>
+
+                <!-- 頁面 3: 回饋規則設定 -->
+                <div id="rule-view" class="view-panel">
+                    <div class="rule-detail-container">
+                        <h2>自主學習發表課堂規則 & 回饋設計</h2>
+                        <div class="rule-card">
+                            <h3><i class="fa-solid fa-lightbulb"></i> 核心理念：MVP 回饋法則 (Most Valuable Point)</h3>
+                            <p>為了使學生自主學習發表的成效最大化，並提高台下聽眾的專注度，我們設計了 **「MVP 回饋法則」**。這是一個融合形成性評量與反思性學習的機制。</p>
+                        </div>
+                        
+                        <div class="rule-card" style="margin-top: 1.5rem; background: var(--surface);">
+                            <h3><i class="fa-solid fa-bullseye"></i> 聆聽者的任務</h3>
+                            <ul style="list-style-type: none; padding-left: 0; margin-top: 0.75rem;">
+                                <li style="position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; font-size: 0.9rem; line-height: 1.6;">
+                                    <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">•</span>
+                                    <strong>自主提交回饋</strong>：每位同學在每堂課（45分鐘）中，可至「學生端即時回饋系統」提交學習回饋。
+                                </li>
+                                <li style="position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; font-size: 0.9rem; line-height: 1.6;">
+                                    <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">•</span>
+                                    <strong>挑選 MVP</strong>：選出該堂課中，你認為「最有收穫、最受啟發」的報告組別進行反思記錄。
+                                </li>
+                                <li style="position: relative; padding-left: 1.25rem; margin-bottom: 0.5rem; font-size: 0.9rem; line-height: 1.6;">
+                                    <span style="position: absolute; left: 0; color: var(--accent); font-weight: bold;">•</span>
+                                    <strong>具體描述</strong>：回饋內容需在 30 字以上，請寫出該組報告的「閃光點」以及「我從中學到的一件事」。
+                                </li>
+                            </ul>
+                            
+                            <div style="margin-top: 1.5rem; border-top: 1px dashed var(--border); padding-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                                <p style="font-size: 0.85rem; color: var(--text-muted);">您可以將此連結提供給學生，或在上課時直接開啟給學生掃描 / 輸入：</p>
+                                <a href="student.html" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background-color: var(--primary); color: var(--surface); text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: bold; font-size: 0.95rem; transition: background-color 0.2s; box-shadow: var(--shadow-sm);">
+                                    <i class="fa-solid fa-up-right-from-square"></i> 進入「學生即時回饋系統」
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 頁面 4: 繳交狀況統計 -->
+                <div id="submission-view" class="view-panel">
+                    <div class="panel-header" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                            <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--primary); margin: 0;">學生回饋繳交狀況</h2>
+                            <!-- Session Selector -->
+                            <div class="filter-group" style="display: flex; gap: 0.5rem; align-items: center;">
+                                <label style="font-size: 0.85rem; font-weight: bold; color: var(--primary);">選擇堂次：</label>
+                                <select id="submission-session-filter" style="padding: 0.4rem 0.8rem; border-radius: 6px; width: 160px; border: 1px solid var(--border); background-color: var(--surface); color: var(--primary); outline: none; font-size: 0.85rem;">
+                                    <option value="">所有堂次</option>
+                                    <option value="1">第一節課 (Session 1)</option>
+                                    <option value="2">第二節課 (Session 2)</option>
+                                    <option value="3">第三節課 (Session 3)</option>
+                                    <option value="4">第四節課 (Session 4)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">根據學生名冊統計各場次已填寫與尚未填寫回饋的學生名單。</p>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <section class="teacher-dashboard" style="margin-top: 1.5rem;">
+                        <div class="stat-card">
+                            <div class="stat-icon info"><i class="fa-solid fa-users"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">應繳交總人數</span>
+                                <span class="stat-value" id="sub-stat-total">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon success"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">已繳交人數</span>
+                                <span class="stat-value" id="sub-stat-filled">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon danger"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">未繳交人數</span>
+                                <span class="stat-value" id="sub-stat-unfilled">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon pending"><i class="fa-solid fa-chart-pie"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">繳交率</span>
+                                <span class="stat-value" id="sub-stat-rate">0%</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Top 3 MVP Leaderboard -->
+                    <div style="margin-top: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; background-color: var(--surface); box-shadow: var(--shadow-sm);">
+                        <h4 style="color: var(--accent); margin-bottom: 1rem; font-size: 1rem; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                            <i class="fa-solid fa-trophy"></i> 聽眾票選 MVP 排行榜 (Top 3)
+                        </h4>
+                        <div id="mvp-leaderboard" style="display: flex; gap: 1rem; justify-content: center; align-items: flex-end; min-height: 120px; padding-top: 0.5rem;">
+                            <!-- MVP Cards will go here -->
+                        </div>
+                    </div>
+
+                    <!-- Student list boxes -->
+                    <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;">
+                        <div style="border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; background-color: var(--surface); box-shadow: var(--shadow-sm);">
+                            <h4 style="color: var(--danger); margin-bottom: 1rem; font-size: 0.95rem; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                                <i class="fa-solid fa-circle-xmark"></i> 尚未填寫 (<span id="unfilled-count">0</span>)
+                            </h4>
+                            <div id="unfilled-students-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; max-height: 400px; overflow-y: auto; padding-right: 0.25rem;">
+                                <!-- Tags will go here -->
+                            </div>
+                        </div>
+                        <div style="border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; background-color: var(--surface); box-shadow: var(--shadow-sm);">
+                            <h4 style="color: var(--secondary); margin-bottom: 1rem; font-size: 0.95rem; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;">
+                                <i class="fa-solid fa-circle-check"></i> 已填寫 (<span id="filled-count">0</span>)
+                            </h4>
+                            <div id="filled-students-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; max-height: 400px; overflow-y: auto; padding-right: 0.25rem;">
+                                <!-- Tags will go here -->
+                            </div>
+                        </div>
+                        <div style="border: 1px solid #FDE68A; border-radius: var(--radius-md); padding: 1.5rem; background-color: #FFFBEB; box-shadow: var(--shadow-sm);">
+                            <h4 style="color: #D97706; margin-bottom: 1rem; font-size: 0.95rem; font-weight: bold; display: flex; align-items: center; gap: 0.5rem; border-bottom: 1px solid #FDE68A; padding-bottom: 0.5rem;">
+                                <i class="fa-solid fa-thumbs-up"></i> MVP 推薦榜 (<span id="recommend-count">0</span>)
+                            </h4>
+                            <div id="recommend-students-list" style="display: flex; flex-wrap: wrap; gap: 0.5rem; max-height: 400px; overflow-y: auto; padding-right: 0.25rem;">
+                                <!-- Tags will go here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 5. 老師評語彈窗 -->
+    <div class="modal-overlay" id="comment-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-pen-to-square"></i> 編輯發表狀態與評語</h3>
+                <button class="close-modal-btn" id="close-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info-group">
+                    <label>報告主題</label>
+                    <input type="text" id="modal-topic-input" class="modal-input" style="font-weight: bold; color: var(--primary); width: 100%;">
+                </div>
+                <div class="modal-info-group">
+                    <label>報告同學</label>
+                    <div class="info-value text-muted" id="modal-presenters">1002-1 陳怡君, 1002-2 林佳慧</div>
+                </div>
+                
+                <div class="modal-form-grid">
+                    <div class="modal-form-group">
+                        <label>分配場次</label>
+                        <select id="modal-session-select" class="modal-input">
+                            <option value="1">第一節 (Session 1)</option>
+                            <option value="2">第二節 (Session 2)</option>
+                            <option value="3">第三節 (Session 3)</option>
+                            <option value="4">第四節 (Session 4)</option>
+                            <option value="0">備用 / 延誤區</option>
+                        </select>
+                    </div>
+                    <div class="modal-form-group">
+                        <label>報告狀態</label>
+                        <div class="status-options">
+                            <label class="status-radio-label">
+                                <input type="radio" name="modal-status" value="pending" checked>
+                                <span class="radio-custom pending">⏳ 尚未報告</span>
+                            </label>
+                            <label class="status-radio-label">
+                                <input type="radio" name="modal-status" value="completed">
+                                <span class="radio-custom completed">✅ 已完成</span>
+                            </label>
+                            <label class="status-radio-label">
+                                <input type="radio" name="modal-status" value="delayed">
+                                <span class="radio-custom delayed">❌ 延誤缺席</span>
+                            </label>
+                            <label class="status-radio-label" style="margin-top: 8px;">
+                                <input type="checkbox" id="modal-recommend-checkbox" style="display:none;">
+                                <span class="radio-custom recommend" id="modal-recommend-btn"><i class="fa-solid fa-thumbs-up"></i> 老師推薦MVP</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-form-group" style="margin-top: 1rem;">
+                    <label>發表時數計時器</label>
+                    <div style="display: flex; align-items: center; gap: 1.5rem; background: var(--bg-body); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                        <div style="font-size: 2.2rem; font-weight: bold; color: var(--primary); font-family: monospace; letter-spacing: 2px;" id="timer-display">00:00</div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button type="button" id="timer-start-btn" style="white-space: nowrap; padding: 0.5rem 1rem; border-radius: 6px; border: none; background-color: var(--primary); color: white; cursor: pointer; font-weight: bold; transition: opacity 0.2s;"><i class="fa-solid fa-play"></i> 開始</button>
+                            <button type="button" id="timer-pause-btn" style="white-space: nowrap; padding: 0.5rem 1rem; border-radius: 6px; border: none; background-color: var(--warning); color: white; cursor: pointer; font-weight: bold; display: none; transition: opacity 0.2s;"><i class="fa-solid fa-pause"></i> 暫停</button>
+                            <button type="button" id="timer-reset-btn" style="white-space: nowrap; padding: 0.5rem 1rem; border-radius: 6px; border: 1px solid var(--border); background-color: var(--surface); color: var(--text-dark); cursor: pointer; font-weight: bold; transition: background-color 0.2s;"><i class="fa-solid fa-rotate-right"></i> 重置</button>
+                        </div>
+                        <div style="margin-left: auto; font-size: 0.85rem; color: var(--text-muted);">
+                            *儲存時將一併記錄時數
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-form-group">
+                    <label style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; flex-direction: column; gap: 8px;">
+                        <span>指導老師評語紀錄</span>
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); align-self: center; margin-right: 4px;">優點：</span>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '💡 內容豐富 '">💡 內容豐富</button>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '🎤 台風穩健 '">🎤 台風穩健</button>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '📊 簡報精美 '">📊 簡報精美</button>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '🔍 研究深入 '">🔍 研究深入</button>
+                        </div>
+                        <div style="display: flex; gap: 4px; flex-wrap: wrap;">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); align-self: center; margin-right: 4px;">建議：</span>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '⚠️ 音量可放大 '">⚠️ 音量可放大</button>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '⚠️ 主題可更聚焦 '">⚠️ 主題可更聚焦</button>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '⚠️ 簡報字體可放大 '">⚠️ 簡報字體可放大</button>
+                            <button type="button" class="quick-comment-btn" onclick="document.getElementById('modal-comment').value += '⚠️ 需增加文獻來源 '">⚠️ 需增加文獻來源</button>
+                        </div>
+                    </label>
+                    <textarea id="modal-comment" rows="5" class="modal-input" placeholder="請在此記錄學生的自主學習成果亮點、簡報表現，以及後續建議..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn btn-secondary" id="modal-cancel-btn">取消</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="modal-btn btn-secondary" id="modal-save-next-btn" style="border-color: var(--primary); color: var(--primary);">儲存並下一組</button>
+                    <button class="modal-btn btn-primary" id="modal-save-btn">確認儲存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

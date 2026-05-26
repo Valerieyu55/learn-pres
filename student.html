@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自主學習成果發表 - 學生即時回饋系統</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-main: #F7F2EA;         /* 奶茶米白背景 */
+            --primary: #2F3A4A;         /* 深藍灰主色 */
+            --secondary: #A8B8A0;       /* 鼠尾草綠輔助色 */
+            --accent: #C89F7A;          /* 焦糖色強調色 */
+            --surface: #FFFFFF;         /* 卡片白色背景 */
+            --border: #E6DED3;          /* 柔和邊框 */
+            --text-dark: #2F3A4A;
+            --text-muted: #7E8B9B;
+            --text-light: #FFFFFF;
+            --radius-md: 10px;
+            --shadow-md: 0 6px 12px rgba(47, 58, 74, 0.06);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            min-height: 100vh;
+            padding: 2rem 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .header {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-md);
+        }
+
+        .header-title h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .student-badge {
+            font-size: 0.85rem;
+            color: var(--primary);
+            background-color: var(--bg-main);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+        }
+
+        .rule-banner {
+            background: linear-gradient(135deg, #FAF4EB 0%, #F5EAE0 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .rule-banner h2 {
+            font-size: 1.05rem;
+            color: var(--accent);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rule-banner p {
+            font-size: 0.85rem;
+            line-height: 1.5;
+            color: var(--text-dark);
+        }
+
+        /* 網頁版雙欄版面 */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 4.5fr 7.5fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        .form-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-card h3 {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            outline: none;
+            background-color: #FAF9F6;
+            color: var(--text-dark);
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--accent);
+            background-color: var(--surface);
+            box-shadow: 0 0 0 3px rgba(200, 159, 122, 0.15);
+        }
+
+        .char-count {
+            font-size: 0.75rem;
+            text-align: right;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: var(--primary);
+            color: var(--text-light);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            background-color: #1F2834;
+        }
+
+        .wall-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 550px;
+        }
+
+        .wall-card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .wall-card h3 .refresh-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        .feedbacks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            align-items: start;
+            overflow-y: auto;
+            flex-grow: 1;
+            max-height: 500px;
+            padding-right: 0.25rem;
+        }
+
+        .feedback-item {
+            background-color: #FAF9F6;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: transform 0.2s;
+        }
+
+        .feedback-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .feedback-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            border-bottom: 1px solid rgba(230, 222, 211, 0.5);
+            padding-bottom: 4px;
+        }
+
+        .feedback-student-name {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .feedback-target {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .feedback-text {
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        /* 響應式佈局：當寬度小於 850px 時改為單欄 */
+        @media (max-width: 850px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            body {
+                padding: 1rem;
+            }
+        }
+
+        /* 自訂滾動條 */
+        .feedbacks-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+        .feedbacks-grid::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .feedbacks-grid::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+        .feedbacks-grid::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .student-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .student-tab {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .student-tab.active {
+            background-color: var(--primary);
+            color: var(--surface);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .student-tab:not(.active) {
+            background-color: var(--surface);
+            color: var(--primary);
+            border: 1px solid var(--border);
+        }
+
+        .student-tab:not(.active):hover {
+            background-color: #E6DED3;
+        }
+
+        .tab-view {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Simplified Kanban styles for read-only view */
+        .kanban-board {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 850px) {
+            .kanban-board {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 1rem;
+            }
+            .kanban-column {
+                min-width: 300px;
+                flex-shrink: 0;
+            }
+        }
+
+        .kanban-column {
+            background-color: #FAF9F6;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            height: 100%;
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .column-title h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .column-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .presentation-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-title">
+                <h1><i class="fa-solid fa-graduation-cap"></i> 自主學習成果發表 - 學生即時回饋系統</h1>
+                <p>請聆聽同儕的自主學習報告，並寫下對你最有收穫的內容與回饋</p>
+            </div>
+            <span class="student-badge"><i class="fa-solid fa-users"></i> 同儕聽眾端</span>
+        </header>
+
+        <div style="background-color: #FDF8F3; border: 1px solid #C89F7A; border-radius: 8px; padding: 12px 16px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(200, 159, 122, 0.1);">
+            <i class="fa-solid fa-bullhorn" style="color: #D97706; font-size: 1.25rem;"></i>
+            <div style="flex: 1;">
+                <h4 style="margin: 0 0 4px 0; color: var(--primary); font-size: 0.95rem;">重要提醒：上傳您的報告檔案！</h4>
+                <p style="margin: 0; color: var(--text-dark); font-size: 0.85rem;">
+                    準備報告的同學，請務必於上台前將您的簡報檔案上傳至指定資料夾：
+                    <a href="https://drive.google.com/drive/folders/1D1YVPAB0pvEJiRB_ExYAksGdLibMFafV?usp=sharing" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: underline; margin-left: 4px;">點我前往 Google Drive 上傳區</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="student-tabs">
+            <button class="student-tab active" data-target="schedule-view">
+                <i class="fa-regular fa-calendar-days"></i> 排程總覽
+            </button>
+            <button class="student-tab" data-target="feedback-view">
+                <i class="fa-solid fa-pen-to-square"></i> 填寫 MVP 回饋
+            </button>
+        </div>
+
+        <div id="schedule-view" class="tab-view active">
+
+            <!-- 搜尋列 -->
+            <div class="search-container" style="margin-top: 1rem; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 1rem;">
+                <div style="position: relative; width: 100%;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1.25rem;"></i>
+                    <input type="text" id="student-kanban-search" placeholder="快速搜尋你的姓名或主題..." style="width: 100%; padding: 1rem 1.5rem 1rem 3rem; border: 2px solid var(--accent); border-radius: 30px; outline: none; background: #FFFFFF; color: var(--primary); box-shadow: 0 6px 16px rgba(200, 159, 122, 0.15); font-size: 1.15rem; transition: all 0.2s;">
+                </div>
+                
+                <div style="display: flex; justify-content: flex-start; align-items: center; gap: 10px;">
+                    <span style="font-weight: 700; color: var(--primary);">場次篩選：</span>
+                    <select id="student-schedule-filter" style="padding: 0.6rem 1rem; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--primary); font-size: 0.95rem; outline: none; cursor: pointer; box-shadow: var(--shadow-sm); min-width: 200px;">
+                        <option value="all">顯示全部場次</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="kanban-board" id="student-kanban-board">
+                <!-- Kanban columns will be rendered here via JS -->
+            </div>
+        </div>
+
+        <div id="feedback-view" class="tab-view">
+            <section class="rule-banner">
+                <h2><i class="fa-solid fa-star"></i> 聽眾任務：MVP回饋法則</h2>
+                <p>在每堂45分鐘的發表中，請挑選出一個最受啟發的報告，記錄其「閃光點」與「學到的事」（至少30字以上），此內容將作為同儕學習與觀摩的記錄。</p>
+            </section>
+
+        <div class="main-layout">
+            <!-- 左欄：提交回饋表單 -->
+            <main class="form-card">
+                <h3><i class="fa-solid fa-pen-nib"></i> 填寫回饋表單</h3>
+                <form id="student-feedback-form">
+                    <div class="form-group">
+                        <label for="student-name">個人姓名 (請填寫正確全名)</label>
+                        <input type="text" id="student-name" placeholder="例如：林小明" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="session">聆聽堂次</label>
+                        <select id="session" required>
+                            <option value="">請選擇堂次...</option>
+                            <option value="1">第一節課 (Session 1)</option>
+                            <option value="2">第二節課 (Session 2)</option>
+                            <option value="3">第三節課 (Session 3)</option>
+                            <option value="4">第四節課 (Session 4)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="topic">最具啟發的報告主題</label>
+                        <select id="topic" required disabled>
+                            <option value="">請先選擇堂次</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">閃光點與我學到的事</label>
+                        <textarea id="content" rows="6" placeholder="請描述最具啟發的點與收穫 (至少30字)" required minlength="30"></textarea>
+                        <div class="char-count"><span id="char-num">0</span> / 30 字以上</div>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-paper-plane"></i> 提交 MVP 回饋
+                    </button>
+                </form>
+            </main>
+
+            <!-- 右欄：即時回饋牆 -->
+            <section class="wall-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;">
+                        <span><i class="fa-solid fa-comments"></i> 現場即時回饋牆</span>
+                        <span class="refresh-tag" style="font-size: 0.7rem;"><i class="fa-solid fa-arrows-rotate"></i> 自動即時更新</span>
+                    </h3>
+                    <select id="wall-session-filter" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--primary); font-weight: bold; outline: none; cursor: pointer;">
+                        <option value="all">顯示所有堂次</option>
+                        <option value="1">只顯示第一節課</option>
+                        <option value="2">只顯示第二節課</option>
+                        <option value="3">只顯示第三節課</option>
+                        <option value="4">只顯示第四節課</option>
+                    </select>
+                </div>
+                <div class="feedbacks-grid" id="feedbacks-grid">
+                    <!-- Feedbacks show here -->
+                </div>
+            </section>
+        </div>
+        </div> <!-- End of feedback-view -->
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let presentations = getPresentations();
+            let feedbacks = getFeedbacks();
+
+            // Tab logic
+            const tabs = document.querySelectorAll('.student-tab');
+            const tabViews = document.querySelectorAll('.tab-view');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabViews.forEach(v => v.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(tab.getAttribute('data-target')).classList.add('active');
+                });
+            });
+
+            // Wall filter
+            const wallFilter = document.getElementById('wall-session-filter');
+            if (wallFilter) {
+                wallFilter.addEventListener('change', renderFeedbacks);
+            }
+
+            // Render Student Read-Only Kanban Board
+            function renderStudentBoard() {
+                const board = document.getElementById('student-kanban-board');
+                board.innerHTML = '';
+
+                // Create Sessions 1 to 4
+                for (let i = 1; i <= 4; i++) {
+                    const col = document.createElement('div');
+                    col.className = 'kanban-column';
+                    col.dataset.session = i;
+                    
+                    const dateVal = localStorage.getItem(`scheduleDate_${i}`) || '';
+                    const locVal = localStorage.getItem(`scheduleLoc_${i}`) || '';
+                    
+                    const dateStr = dateVal ? `<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 700; color: #D97706; background-color: #FEF3C7; padding: 6px 12px; border-radius: 8px; border: 1px solid #FCD34D; box-shadow: 0 2px 4px rgba(217, 119, 6, 0.1);"><i class="fa-regular fa-calendar"></i> ${dateVal}</span>` : '';
+                    const locStr = locVal ? `<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 700; color: #0369A1; background-color: #E0F2FE; padding: 6px 12px; border-radius: 8px; border: 1px solid #BAE6FD; box-shadow: 0 2px 4px rgba(3, 105, 161, 0.1);"><i class="fa-solid fa-location-dot"></i> ${locVal}</span>` : '';
+
+                    col.innerHTML = `
+                        <div class="column-header" style="flex-direction: column; align-items: flex-start; gap: 12px;">
+                            <div class="column-title">
+                                <h3 style="display: flex; flex-wrap: wrap; align-items: center; font-size: 1.25rem;">第 ${i} 節 (Session ${i})</h3>
+                            </div>
+                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                ${dateStr}
+                                ${locStr}
+                            </div>
+                        </div>
+                        <div class="column-body" id="col-session-${i}"></div>
+                    `;
+                    board.appendChild(col);
+                }
+
+                // Render cards
+                const sessionCounters = {1: 1, 2: 1, 3: 1, 4: 1};
+                presentations.forEach(p => {
+                    if (p.session >= 1 && p.session <= 4 && p.status !== 'delayed') {
+                        const colBody = document.getElementById(`col-session-${p.session}`);
+                        if (colBody) {
+                            const seq = sessionCounters[p.session]++;
+                            const card = document.createElement('div');
+                            card.className = 'presentation-card';
+                            const catStr = p.category && p.category !== '未分類' ? `<span style="display:inline-block; font-size:0.7rem; background:rgba(168,184,160,0.15); color:#66735e; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(168,184,160,0.3); vertical-align:middle; font-weight:700;">${p.category}</span>` : '';
+                            
+                            const mockP = mockPresentations.find(m => m.id === p.id);
+                            const isTopicModified = mockP && mockP.topic !== p.topic;
+                            const topicStyle = isTopicModified ? 'color: #D97706; font-weight: 800; background: #FEF3C7; padding: 2px 4px; border-radius: 4px; border: 1px solid #FDE68A;' : '';
+                            const displayTopic = `<span style="${topicStyle}">${p.topic}</span>`;
+
+                            let extraContent = '';
+                            if (p.status === 'completed') {
+                                card.style.opacity = '0.6';
+                                card.style.backgroundColor = '#E5E7EB';
+                                card.style.boxShadow = 'none';
+                                card.style.border = '1px solid #D1D5DB';
+                            }
+                            if (p.isRecommended) {
+                                card.style.position = 'relative';
+                                extraContent += '<div class="animated-thumb"><i class="fa-solid fa-thumbs-up" style="color: #F59E0B;"></i></div>';
+                            }
+
+                            card.innerHTML = `
+                                ${extraContent}
+                                <div class="card-title" style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
+                                    <span style="display:inline-block; background-color:var(--accent); color:white; min-width:20px; height:20px; text-align:center; border-radius:10px; font-size:0.75rem; line-height:20px; padding: 0 4px; margin-right:4px; vertical-align: middle; box-shadow: 0 2px 4px rgba(200,159,122,0.3);">${seq}</span>
+                                    ${displayTopic}
+                                    ${catStr}
+                                </div>
+                                <div class="card-desc">
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>${p.presenters.replace(/\[1001\]/g, '<span style="color: #EA580C; font-weight: 700;">[1001]</span>').replace(/\[1002\]/g, '<span style="color: #B91C1C; font-weight: 700;">[1002]</span>')}</span>
+                                </div>
+                            `;
+                            colBody.appendChild(card);
+                        }
+                    }
+                });
+                
+                // Populate schedule filter options
+                const scheduleFilter = document.getElementById('student-schedule-filter');
+                if (scheduleFilter) {
+                    scheduleFilter.innerHTML = '<option value="all">顯示全部場次</option>';
+                    for (let i = 1; i <= 4; i++) {
+                        const dateVal = localStorage.getItem(`scheduleDate_${i}`) || '';
+                        const dateStr = dateVal ? ` (${dateVal})` : '';
+                        scheduleFilter.innerHTML += `<option value="${i}">第 ${i} 節${dateStr}</option>`;
+                    }
+                    
+                    scheduleFilter.addEventListener('change', (e) => {
+                        const val = e.target.value;
+                        const columns = document.querySelectorAll('#student-kanban-board .kanban-column');
+                        columns.forEach(col => {
+                            if (val === 'all' || col.dataset.session === val) {
+                                col.style.display = 'flex';
+                            } else {
+                                col.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+            }
+            renderStudentBoard();
+
+            // Student Kanban Search Logic
+            const studentKanbanSearchInput = document.getElementById('student-kanban-search');
+            function applyStudentSearchFilter() {
+                if (!studentKanbanSearchInput) return;
+                const query = studentKanbanSearchInput.value.trim().toLowerCase();
+                const cards = document.querySelectorAll('#student-kanban-board .presentation-card');
+                cards.forEach(card => {
+                    if (!query) {
+                        card.style.display = 'block';
+                        return;
+                    }
+                    const topic = card.querySelector('.card-title').textContent.toLowerCase();
+                    const presenters = card.querySelector('.card-desc span').textContent.toLowerCase();
+                    if (topic.includes(query) || presenters.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            if (studentKanbanSearchInput) {
+                studentKanbanSearchInput.addEventListener('input', applyStudentSearchFilter);
+            }
+
+            // Helper to format presenters list (removes seat numbers)
+            function cleanPresenters(str) {
+                return str.replace(/\s*\(\d+\)/g, '');
+            }
+
+            const sessionSelect = document.getElementById('session');
+            const topicSelect = document.getElementById('topic');
+            const feedbackForm = document.getElementById('student-feedback-form');
+            const studentNameInput = document.getElementById('student-name');
+            const contentTextarea = document.getElementById('content');
+            const charNumSpan = document.getElementById('char-num');
+
+            // Set character count listener
+            contentTextarea.addEventListener('input', () => {
+                const len = contentTextarea.value.length;
+                charNumSpan.textContent = len;
+                if (len >= 30) {
+                    charNumSpan.style.color = 'var(--secondary)';
+                } else {
+                    charNumSpan.style.color = 'var(--text-muted)';
+                }
+            });
+
+            // Update topics when session is changed
+            sessionSelect.addEventListener('change', () => {
+                presentations = getPresentations();
+                const sessionVal = parseInt(sessionSelect.value);
+                topicSelect.innerHTML = '<option value="">請選擇報告主題...</option>';
+                
+                if (isNaN(sessionVal)) {
+                    topicSelect.disabled = true;
+                    return;
+                }
+
+                topicSelect.disabled = false;
+                const sessionPresentations = presentations.filter(p => p.session === sessionVal && p.status !== 'delayed');
+
+                if (sessionPresentations.length === 0) {
+                    topicSelect.innerHTML = '<option value="">(此場次無進行中報告)</option>';
+                    topicSelect.disabled = true;
+                    return;
+                }
+
+                sessionPresentations.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.topic;
+                    const catStr = p.category && p.category !== '未分類' ? `[${p.category}] ` : '';
+                    opt.textContent = `${catStr}${p.topic} (${cleanPresenters(p.presenters)})`;
+                    topicSelect.appendChild(opt);
+                });
+            });
+
+            // Form submission
+            feedbackForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const studentName = studentNameInput.value.trim();
+                
+                // Name validation against roster
+                let validNames = [];
+                presentations.forEach(p => {
+                    let str = p.presenters.replace(/\[\d{4}\]/g, '');
+                    let parts = str.split(',');
+                    parts.forEach(part => {
+                        let namePart = part.split('(')[0].trim();
+                        if (namePart) validNames.push(namePart);
+                    });
+                });
+                
+                let inputNameClean = studentName.replace(/^\d{4}\s*/, '').trim();
+                
+                if (!validNames.includes(inputNameClean)) {
+                    alert('很抱歉，您的名字不在學生名冊中，無法提交留言。');
+                    return;
+                }
+
+                const session = sessionSelect.value;
+                const topic = topicSelect.value;
+                const content = contentTextarea.value.trim();
+
+                if (content.length < 30) {
+                    alert('回饋字數需在30字以上！');
+                    return;
+                }
+
+                const newFeedback = {
+                    id: 'fb_' + Date.now(),
+                    studentName: inputNameClean,
+                    session: session,
+                    topic: topic,
+                    content: content,
+                    likes: 0,
+                    timestamp: new Date().toLocaleString('zh-TW', { hour12: false })
+                };
+
+                saveFeedback(newFeedback);
+                feedbacks = getFeedbacks();
+                
+                renderFeedbacks();
+                
+                // Clear content
+                contentTextarea.value = '';
+                charNumSpan.textContent = '0';
+                charNumSpan.style.color = 'var(--text-muted)';
+                
+                alert('提交 MVP 學習回饋成功！感謝你的參與。');
+            });
+
+            function renderFeedbacks() {
+                const grid = document.getElementById('feedbacks-grid');
+                const sessionFilter = document.getElementById('wall-session-filter');
+                grid.innerHTML = '';
+
+                let activeFeedbacks = [...feedbacks];
+                if (sessionFilter && sessionFilter.value !== 'all') {
+                    activeFeedbacks = activeFeedbacks.filter(fb => String(fb.session) === sessionFilter.value);
+                }
+                activeFeedbacks.reverse(); // Show newest first
+
+                if (activeFeedbacks.length === 0) {
+                    grid.innerHTML = '<div style="font-size:0.9rem; color:var(--text-muted); text-align:center; padding:30px 0; grid-column: 1/-1;">目前尚無同學提交該堂回饋，快來寫下第一個回饋吧！</div>';
+                    return;
+                }
+
+                let validNames = [];
+                presentations.forEach(p => {
+                    let str = p.presenters.replace(/\[\d{4}\]/g, '');
+                    let parts = str.split(',');
+                    parts.forEach(part => {
+                        let namePart = part.split('(')[0].trim();
+                        if (namePart) validNames.push(namePart);
+                    });
+                });
+
+                let myName = localStorage.getItem('myStudentName') || '';
+
+                activeFeedbacks.forEach(fb => {
+                    if (!fb.likedBy) fb.likedBy = [];
+                    
+                    const hasLiked = myName ? fb.likedBy.includes(myName) : false;
+                    const div = document.createElement('div');
+                    div.className = 'feedback-item';
+                    
+                    const likedByStr = fb.likedBy.length > 0 ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; text-align: right;">${fb.likedBy.join(', ')} 覺得讚</div>` : '';
+
+                    div.innerHTML = `
+                        <div class="feedback-item-header">
+                            <span class="feedback-student-name">👤 ${fb.studentName}</span>
+                            <span>堂次 ${fb.session}</span>
+                        </div>
+                        <div class="feedback-target">🎯 聆聽主題：${fb.topic}</div>
+                        <div class="feedback-text">「${fb.content}」</div>
+                        <div style="display: flex; flex-direction: column; align-items: flex-end; margin-top: 8px;">
+                            <button class="like-btn" data-id="${fb.id}" style="background: none; border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: ${hasLiked ? '#EF4444' : 'var(--primary)'}; transition: all 0.2s;">
+                                <i class="fa-${hasLiked ? 'solid' : 'regular'} fa-heart" style="${hasLiked ? 'color: #EF4444;' : ''}"></i> 讚 (${fb.likedBy.length})
+                            </button>
+                            ${likedByStr}
+                        </div>
+                    `;
+                    
+                    const likeBtn = div.querySelector('.like-btn');
+                    likeBtn.addEventListener('click', () => {
+                        let currentName = localStorage.getItem('myStudentName');
+                        if (!currentName) {
+                            let input = document.getElementById('student-name').value.trim();
+                            if (!input) {
+                                alert('請先在上方表單填寫您的個人姓名，才能進行按讚喔！');
+                                document.getElementById('student-name').focus();
+                                return;
+                            }
+                            input = input.replace(/^\d{4}\s*/, '');
+                            if (!validNames.includes(input)) {
+                                alert('很抱歉，您的名字不在學生名冊中，無法按讚。請確認您輸入的是正確全名。');
+                                document.getElementById('student-name').focus();
+                                return;
+                            }
+                            currentName = input;
+                            localStorage.setItem('myStudentName', currentName);
+                        }
+                        
+                        const realFb = feedbacks.find(f => f.id === fb.id);
+                        if (realFb) {
+                            if (!realFb.likedBy) realFb.likedBy = [];
+                            if (realFb.likedBy.includes(currentName)) {
+                                // Retract like
+                                realFb.likedBy = realFb.likedBy.filter(n => n !== currentName);
+                            } else {
+                                // Add like
+                                realFb.likedBy.push(currentName);
+                            }
+                            
+                            if (typeof saveFeedbacks === 'function') {
+                                saveFeedbacks(feedbacks);
+                            } else {
+                                localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+                            }
+                            renderFeedbacks();
+                        }
+                    });
+                    grid.appendChild(div);
+                });
+            }
+
+            renderFeedbacks();
+
+            let lastScheduleConfig = '';
+            for (let i = 1; i <= 4; i++) {
+                lastScheduleConfig += (localStorage.getItem(`scheduleDate_${i}`) || '') + (localStorage.getItem(`scheduleLoc_${i}`) || '');
+            }
+
+            // Auto reload state every 5 seconds to sync with other sessions / teachers
+            setInterval(() => {
+
+                // Sync presentations
+                const oldPresentationsStr = JSON.stringify(presentations);
+                presentations = getPresentations();
+
+                // Sync schedule dates/locations
+                let currentScheduleConfig = '';
+                for (let i = 1; i <= 4; i++) {
+                    currentScheduleConfig += (localStorage.getItem(`scheduleDate_${i}`) || '') + (localStorage.getItem(`scheduleLoc_${i}`) || '');
+                }
+
+                if (oldPresentationsStr !== JSON.stringify(presentations) || currentScheduleConfig !== lastScheduleConfig) {
+                    lastScheduleConfig = currentScheduleConfig;
+                    renderStudentBoard();
+                    applyStudentSearchFilter();
+                }
+
+                // Sync feedbacks
+                const currentLength = feedbacks.length;
+                feedbacks = getFeedbacks();
+                if (feedbacks.length !== currentLength) {
+                    renderFeedbacks();
+                }
+
+                // Sync topics dropdown automatically if a session is currently selected
+                if (sessionSelect.value) {
+                    const sessionVal = parseInt(sessionSelect.value);
+                    const sessionPresentations = presentations.filter(p => p.session === sessionVal && p.status !== 'delayed');
+
+                    const currentOptions = Array.from(topicSelect.options).slice(1).map(opt => opt.value);
+                    const latestTopics = sessionPresentations.map(p => p.topic);
+
+                    const isDifferent = currentOptions.length !== latestTopics.length || 
+                                        !currentOptions.every((val, i) => val === latestTopics[i]);
+
+                    if (isDifferent) {
+                        const previousSelectedValue = topicSelect.value;
+                        topicSelect.innerHTML = '<option value="">請選擇報告主題...</option>';
+                        
+                        if (sessionPresentations.length === 0) {
+                            topicSelect.innerHTML = '<option value="">(此場次無進行中報告)</option>';
+                            topicSelect.disabled = true;
+                        } else {
+                            topicSelect.disabled = false;
+                            sessionPresentations.forEach(p => {
+                                const opt = document.createElement('option');
+                                opt.value = p.topic;
+                                const catStr = p.category && p.category !== '未分類' ? `[${p.category}] ` : '';
+                                opt.textContent = `${catStr}${p.topic} (${cleanPresenters(p.presenters)})`;
+                                topicSelect.appendChild(opt);
+                            });
+                            if (latestTopics.includes(previousSelectedValue)) {
+                                topicSelect.value = previousSelectedValue;
+                            }
+                        }
+                    }
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
