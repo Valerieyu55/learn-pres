@@ -897,7 +897,19 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        return list.map((item, idx) => {
+        const class1001 = list.filter(item => item.class === '1001');
+        const class1002 = list.filter(item => item.class === '1002');
+        const others = list.filter(item => item.class !== '1001' && item.class !== '1002');
+
+        const interleavedList = [];
+        let i = 0, j = 0;
+        while (i < class1001.length || j < class1002.length) {
+            if (i < class1001.length) interleavedList.push(class1001[i++]);
+            if (j < class1002.length) interleavedList.push(class1002[j++]);
+        }
+        interleavedList.push(...others);
+
+        return interleavedList.map((item, idx) => {
             const session = (idx % 4) + 1;
             return {
                 id: `p_${Date.now()}_${idx + 1}`,
@@ -928,6 +940,45 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('系統已恢復至初始狀態。');
         }
     });
+
+    // --- Interleave Logic ---
+    const btnInterleave = document.getElementById('btn-interleave');
+    if (btnInterleave) {
+        btnInterleave.addEventListener('click', () => {
+            if (confirm('確定要自動交錯排列各節次的 1001 與 1002 班級嗎？此操作將會重新排序目前的看板。')) {
+                pushHistory();
+                
+                function getClassStr(p) {
+                    if (p.presenters.includes('[1001]')) return '1001';
+                    if (p.presenters.includes('[1002]')) return '1002';
+                    return 'unknown';
+                }
+
+                const newOrder = [];
+                // Process each session separately
+                [1, 2, 3, 4, 0].forEach(session => {
+                    const sessionCards = presentations.filter(p => p.session === session);
+                    const class1 = sessionCards.filter(p => getClassStr(p) === '1001');
+                    const class2 = sessionCards.filter(p => getClassStr(p) === '1002');
+                    const unk = sessionCards.filter(p => getClassStr(p) === 'unknown');
+                    
+                    const interleaved = [];
+                    let i = 0, j = 0;
+                    while (i < class1.length || j < class2.length) {
+                        if (i < class1.length) interleaved.push(class1[i++]);
+                        if (j < class2.length) interleaved.push(class2[j++]);
+                    }
+                    unk.forEach(p => interleaved.push(p));
+                    
+                    newOrder.push(...interleaved);
+                });
+                
+                presentations = newOrder;
+                savePresentations(presentations);
+                renderBoard();
+            }
+        });
+    }
 
     // --- Submission Status Logic ---
     const subSessionFilter = document.getElementById('submission-session-filter');
