@@ -877,6 +877,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        const getCategorySession = (category) => {
+            if (!category) return null;
+            if (category.includes('大眾傳播') || category.includes('外語') || category.includes('文史哲') || category.includes('法政')) return 1;
+            if (category.includes('A組') || category.includes('醫藥') || category.includes('數理') || category.includes('學科深化') || category.includes('課業深化') || category.includes('藝術與設計') || category.includes('藝術與表演')) return 2;
+            if (category.includes('家政') || category.includes('體育') || category.includes('休閒')) return 3;
+            if (category.includes('財經') || category.includes('商管') || category.includes('資訊')) return 4;
+            return null;
+        };
+
+        const sessionCounts = {1: 0, 2: 0, 3: 0, 4: 0};
+        
+        list.forEach(item => {
+            item.targetSession = getCategorySession(item.category);
+            if (item.targetSession) {
+                sessionCounts[item.targetSession]++;
+            }
+        });
+
+        list.forEach(item => {
+            if (!item.targetSession) {
+                let minSession = 1;
+                for (let s = 2; s <= 4; s++) {
+                    if (sessionCounts[s] < sessionCounts[minSession]) {
+                        minSession = s;
+                    }
+                }
+                item.targetSession = minSession;
+                sessionCounts[minSession]++;
+            }
+        });
+
         const class1001 = list.filter(item => item.class === '1001');
         const class1002 = list.filter(item => item.class === '1002');
         const others = list.filter(item => item.class !== '1001' && item.class !== '1002');
@@ -890,12 +921,11 @@ document.addEventListener('DOMContentLoaded', () => {
         interleavedList.push(...others);
 
         return interleavedList.map((item, idx) => {
-            const session = (idx % 4) + 1;
             return {
                 id: `p_${Date.now()}_${idx + 1}`,
                 topic: item.topic,
                 presenters: item.presenters.join(', '),
-                session: session,
+                session: item.targetSession,
                 status: 'pending',
                 comment: '',
                 category: item.category || '未分類'
