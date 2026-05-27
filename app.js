@@ -1026,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderSubmissionStatus() {
-        if (!unfilledList || !filledList) return;
+        if (!unfilledList) return;
 
         const roster = extractStudentsFromPresentations(presentations);
         const selectedSession = subSessionFilter ? subSessionFilter.value : '';
@@ -1083,7 +1083,7 @@ document.addEventListener('DOMContentLoaded', () => {
         subStatRate.textContent = `${ratePercent}%`;
 
         unfilledCount.textContent = unfilledCountNum;
-        filledCount.textContent = filledCountNum;
+        if (filledCount) filledCount.textContent = filledCountNum;
 
         unfilledList.innerHTML = '';
         if (unfilled.length === 0) {
@@ -1097,17 +1097,19 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        filledList.innerHTML = '';
-        if (filled.length === 0) {
-            filledList.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted); padding: 0.5rem 0;">目前無已填寫回饋的學生。</span>';
-        } else {
-            filled.forEach(item => {
-                const tag = document.createElement('span');
-                tag.style.cssText = 'background-color: #EAEFE6; color: var(--secondary); border: 1px solid rgba(168, 184, 160, 0.2); padding: 0.35rem 0.65rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; cursor: help;';
-                tag.title = `回饋主題: ${item.reviews}`;
-                tag.innerHTML = `<i class="fa-solid fa-user-check"></i> ${item.student.fullName}`;
-                filledList.appendChild(tag);
-            });
+        if (filledList) {
+            filledList.innerHTML = '';
+            if (filled.length === 0) {
+                filledList.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted); padding: 0.5rem 0;">目前無已填寫回饋的學生。</span>';
+            } else {
+                filled.forEach(item => {
+                    const tag = document.createElement('span');
+                    tag.style.cssText = 'background-color: #EAEFE6; color: var(--secondary); border: 1px solid rgba(168, 184, 160, 0.2); padding: 0.35rem 0.65rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; cursor: help;';
+                    tag.title = `回饋主題: ${item.reviews}`;
+                    tag.innerHTML = `<i class="fa-solid fa-user-check"></i> ${item.student.fullName}`;
+                    filledList.appendChild(tag);
+                });
+            }
         }
 
         const recommendCountEl = document.getElementById('recommend-count');
