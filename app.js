@@ -84,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalCancelBtn = document.getElementById('modal-cancel-btn');
     const modalSaveBtn = document.getElementById('modal-save-btn');
     const modalTopic = document.getElementById('modal-topic-input');
+    const modalCategory = document.getElementById('modal-category-select');
     const modalPresenters = document.getElementById('modal-presenters');
     const modalSessionSelect = document.getElementById('modal-session-select');
     const modalComment = document.getElementById('modal-comment');
@@ -394,6 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!p) return;
 
         modalTopic.value = p.topic;
+        if (modalCategory) modalCategory.value = p.category && p.category !== '未分類' ? p.category : '未分類';
         modalPresenters.innerHTML = p.presenters.replace(/\[1001\]/g, '<span style="color: #EA580C; font-weight: 700;">[1001]</span>').replace(/\[1002\]/g, '<span style="color: #B91C1C; font-weight: 700;">[1002]</span>');
         modalSessionSelect.value = p.session;
         modalComment.value = p.comment || '';
@@ -460,6 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const commentVal = modalComment.value;
             const newTopic = modalTopic.value.trim();
+            const newCategory = modalCategory ? modalCategory.value : p.category;
 
             const recommendCheckbox = document.getElementById('modal-recommend-checkbox');
             if (recommendCheckbox) {
@@ -469,6 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (newTopic) {
                 p.topic = newTopic;
             }
+            p.category = newCategory;
             p.session = finalSession;
             p.status = selectedStatus;
             p.comment = commentVal;

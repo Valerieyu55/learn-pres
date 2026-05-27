@@ -100,12 +100,12 @@ const mockPresentations = [
   },
   {
     "id": "p_44",
-    "topic": "烘焙時光：探索餅乾的美味世界",
+    "topic": "當金流進入法庭，我在法院看見的金融犯罪",
     "presenters": "[1002] 李書卉 (26)",
     "session": 1,
     "status": "pending",
     "comment": "",
-    "category": "家政與生活應用學群"
+    "category": "文史哲與法政學群"
   },
   {
     "id": "p_21",
@@ -289,12 +289,12 @@ const mockPresentations = [
   },
   {
     "id": "p_13",
-    "topic": "學吉他",
+    "topic": "俄文學習",
     "presenters": "[1001] 蘇雋博 (20)",
     "session": 3,
     "status": "pending",
     "comment": "",
-    "category": "藝術與表演學群"
+    "category": "外語與檢定學群"
   },
   {
     "id": "p_27",
@@ -540,7 +540,7 @@ function getPresentations() {
     // Map categories from mock data to handle legacy data without categories
     parsed.forEach(p => {
       const mockP = mockPresentations.find(m => m.id === p.id);
-      if (mockP && (!p.category || p.category === '未分類' || p.category !== mockP.category)) {
+      if (mockP && (!p.category || p.category === '未分類')) {
         p.category = mockP.category;
         updated = true;
       }
