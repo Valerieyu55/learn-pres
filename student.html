@@ -565,7 +565,7 @@
     <script src="data.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            let presentations = getPresentations();
+            let presentations = getPublishedPresentations();
             let feedbacks = getFeedbacks();
 
             // Tab logic
@@ -925,7 +925,7 @@
 
                 // Sync presentations
                 const oldPresentationsStr = JSON.stringify(presentations);
-                presentations = getPresentations();
+                presentations = getPublishedPresentations();
 
                 // Sync schedule dates/locations
                 let currentScheduleConfig = '';

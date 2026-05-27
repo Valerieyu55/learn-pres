@@ -558,6 +558,11 @@ function savePresentations(data) {
   localStorage.setItem('presentations', JSON.stringify(data));
 }
 
+function getPublishedPresentations() {
+  const pub = localStorage.getItem('published_presentations');
+  return pub ? JSON.parse(pub) : getPresentations();
+}
+
 function getFeedbacks() {
   const stored = localStorage.getItem('feedbacks');
   return stored ? JSON.parse(stored) : getMockFeedbacks();

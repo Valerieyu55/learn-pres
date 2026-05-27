@@ -601,41 +601,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     p.status = 'pending';
                 }
 
-                // Reorder presentations array based on new DOM order, but force interleave 1001 and 1002
+                // Reorder presentations array based on new DOM order
                 const newPresentationsOrder = [];
                 
-                function getClassStr(p) {
-                    if (p.presenters.includes('[1001]')) return '1001';
-                    if (p.presenters.includes('[1002]')) return '1002';
-                    return 'unknown';
-                }
-
                 document.querySelectorAll('.kanban-column').forEach(col => {
                     const cards = col.querySelectorAll('.presentation-card');
-                    const sessionCards = [];
                     cards.forEach(card => {
                         const cardId = card.dataset.id;
                         const cardData = presentations.find(x => x.id === cardId);
                         if (cardData) {
-                            sessionCards.push(cardData);
+                            newPresentationsOrder.push(cardData);
                         }
                     });
-
-                    // Interleave 1001 and 1002
-                    const class1 = sessionCards.filter(p => getClassStr(p) === '1001');
-                    const class2 = sessionCards.filter(p => getClassStr(p) === '1002');
-                    const unk = sessionCards.filter(p => getClassStr(p) === 'unknown');
-                    
-                    const interleaved = [];
-                    let i = 0, j = 0;
-                    // Try to maintain alternating sequence
-                    while (i < class1.length || j < class2.length) {
-                        if (i < class1.length) interleaved.push(class1[i++]);
-                        if (j < class2.length) interleaved.push(class2[j++]);
-                    }
-                    unk.forEach(p => interleaved.push(p));
-                    
-                    newPresentationsOrder.push(...interleaved);
                 });
                 
                 presentations.forEach(cardData => {
@@ -943,9 +920,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Interleave Logic ---
     const btnInterleave = document.getElementById('btn-interleave');
+    let interleave1001First = true;
     if (btnInterleave) {
         btnInterleave.addEventListener('click', () => {
-            if (confirm('確定要自動交錯排列各節次的 1001 與 1002 班級嗎？此操作將會重新排序目前的看板。')) {
+            if (confirm(`確定要自動交錯排列各節次的 1001 與 1002 班級嗎？\n此操作將以「${interleave1001First ? '1001班' : '1002班'}優先」的方式重新排序，但不會改變您各班內部的先後順序。`)) {
                 pushHistory();
                 
                 function getClassStr(p) {
@@ -962,20 +940,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     const class2 = sessionCards.filter(p => getClassStr(p) === '1002');
                     const unk = sessionCards.filter(p => getClassStr(p) === 'unknown');
                     
+                    const firstClass = interleave1001First ? class1 : class2;
+                    const secondClass = interleave1001First ? class2 : class1;
+                    
                     const interleaved = [];
                     let i = 0, j = 0;
-                    while (i < class1.length || j < class2.length) {
-                        if (i < class1.length) interleaved.push(class1[i++]);
-                        if (j < class2.length) interleaved.push(class2[j++]);
+                    while (i < firstClass.length || j < secondClass.length) {
+                        if (i < firstClass.length) interleaved.push(firstClass[i++]);
+                        if (j < secondClass.length) interleaved.push(secondClass[j++]);
                     }
                     unk.forEach(p => interleaved.push(p));
                     
                     newOrder.push(...interleaved);
                 });
                 
+                interleave1001First = !interleave1001First; // Toggle for next click
+                
                 presentations = newOrder;
                 savePresentations(presentations);
                 renderBoard();
+            }
+        });
+    }
+
+    // --- Publish Logic ---
+    const btnPublish = document.getElementById('btn-publish');
+    if (btnPublish) {
+        btnPublish.addEventListener('click', () => {
+            if (confirm('確定要發布目前的排程與狀態給學生端嗎？\n發布後，學生端才會看到您最新排定的名單順序。')) {
+                localStorage.setItem('published_presentations', JSON.stringify(presentations));
+                alert('已成功發布名單至學生端！');
             }
         });
     }
