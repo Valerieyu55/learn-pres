@@ -520,13 +520,26 @@ function getPresentations() {
     let parsed = JSON.parse(stored);
     let updated = false;
     parsed.forEach(p => {
-      const mockP = mockPresentations.find(m => m.id === p.id);
+      // 抽取第一位學生的純姓名來比對（忽略班級與座號標籤），提高容錯率
+      let studentName = '';
+      const match = p.presenters.match(/\]\s*([^\(,\s]+)/);
+      if (match) studentName = match[1];
+      
+      const mockP = mockPresentations.find(m => m.presenters.includes(studentName));
       if (mockP) {
         if (p.topic !== mockP.topic || p.category !== mockP.category) {
            p.topic = mockP.topic;
            p.category = mockP.category;
            updated = true;
         }
+      }
+
+      // 強制 A 組特定名單的學生回到第 2 節
+      const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
+      const isSpecial = specialStudents.some(s => p.presenters.includes(s));
+      if (isSpecial && p.session !== 2 && p.session !== 0) {
+          p.session = 2;
+          updated = true;
       }
     });
     if (updated) {
