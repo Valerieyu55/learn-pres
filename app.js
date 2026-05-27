@@ -1004,6 +1004,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Reassign Sessions Logic ---
+    const btnReassignSessions = document.getElementById('btn-reassign-sessions');
+    if (btnReassignSessions) {
+        btnReassignSessions.addEventListener('click', () => {
+            if (confirm('確定要根據最新的「學群分類」自動重新分配所有場次嗎？\n未指定的學群將會平均分配到最少人的節次，且此操作會覆蓋您目前手動拖曳的場次！')) {
+                pushHistory();
+                
+                const getCategorySession = (item) => {
+                    const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
+                    if (item.presenters.some(pr => specialStudents.some(s => pr.includes(s)))) return 2;
+
+                    const category = item.category;
+                    if (!category) return null;
+                    if (category.includes('大眾傳播') || category.includes('外語') || category.includes('文史哲') || category.includes('法政')) return 1;
+                    if (category.includes('A組') || category.includes('醫藥') || category.includes('數理') || category.includes('學科深化') || category.includes('課業深化') || category.includes('藝術與設計') || category.includes('藝術與表演')) return 2;
+                    if (category.includes('家政') || category.includes('體育') || category.includes('休閒')) return 3;
+                    if (category.includes('財經') || category.includes('商管') || category.includes('資訊')) return 4;
+                    return null;
+                };
+
+                const sessionCounts = {1: 0, 2: 0, 3: 0, 4: 0};
+                
+                // First pass: assign fixed sessions
+                presentations.forEach(item => {
+                    item.targetSession = getCategorySession(item);
+                    if (item.targetSession) {
+                        sessionCounts[item.targetSession]++;
+                    }
+                });
+
+                // Second pass: dynamically assign remaining to least populated session
+                presentations.forEach(item => {
+                    if (!item.targetSession) {
+                        let minSession = 1;
+                        for (let s = 2; s <= 4; s++) {
+                            if (sessionCounts[s] < sessionCounts[minSession]) {
+                                minSession = s;
+                            }
+                        }
+                        item.targetSession = minSession;
+                        sessionCounts[minSession]++;
+                    }
+                    item.session = item.targetSession; // Apply it
+                    delete item.targetSession;
+                });
+
+                savePresentations(presentations);
+                renderBoard();
+                alert('所有報告已成功依據學群重新分配場次！');
+            }
+        });
+    }
+
     // --- Publish Logic ---
     const btnPublish = document.getElementById('btn-publish');
     if (btnPublish) {
