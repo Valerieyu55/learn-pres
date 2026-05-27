@@ -255,7 +255,7 @@ const mockPresentations = [
     "id": "p_37",
     "topic": "冷次定律與渦電流煞車的定量研究",
     "presenters": "[1002] 郭聿安 (13), [1001] 江安妤 (26), 沈毓庭 (29)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "醫藥生科與數理化學群"
@@ -408,7 +408,7 @@ const mockPresentations = [
     "id": "p_33",
     "topic": "考試作弊神器—學習物聯網應用、軟體編程及AI運用",
     "presenters": "[1002] 柳兆剛 (9)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "資訊工程學群"
@@ -435,7 +435,7 @@ const mockPresentations = [
     "id": "p_11",
     "topic": "自然專題-乾旱壓力對植物氣孔關閉動力學與壓力記憶之研究",
     "presenters": "[1001] 陳宜宏 (14), 吳育宣 (28), 陳子甯 (36)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "醫藥生科與數理化學群"

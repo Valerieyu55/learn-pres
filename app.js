@@ -452,8 +452,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let finalSession = selectedSession;
             if (selectedStatus === 'delayed') finalSession = 0;
             
-            if (isSpecial && finalSession !== 2 && finalSession !== 4 && finalSession !== 0) {
-                alert('注意：此組別包含特定名單學生，只能安排在第2節或第4節！');
+            if (isSpecial && finalSession !== 2 && finalSession !== 0) {
+                alert('注意：此組別包含A組特定名單學生，依規定只能安排在第 2 節！');
                 return false;
             }
 
@@ -587,8 +587,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (p) {
                 const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
                 const isSpecial = specialStudents.some(s => p.presenters.includes(s));
-                if (isSpecial && newSession !== 2 && newSession !== 4) {
-                    alert('注意：此組別包含特定名單學生，只能安排在第2節或第4節！');
+                if (isSpecial && newSession !== 2 && newSession !== 0) {
+                    alert('注意：此組別包含A組特定名單學生，依規定只能安排在第 2 節！');
                     renderBoard(); // reset UI
                     return;
                 }
@@ -877,7 +877,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        const getCategorySession = (category) => {
+        const getCategorySession = (item) => {
+            const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
+            if (item.presenters.some(pr => specialStudents.some(s => pr.includes(s)))) return 2;
+
+            const category = item.category;
             if (!category) return null;
             if (category.includes('大眾傳播') || category.includes('外語') || category.includes('文史哲') || category.includes('法政')) return 1;
             if (category.includes('A組') || category.includes('醫藥') || category.includes('數理') || category.includes('學科深化') || category.includes('課業深化') || category.includes('藝術與設計') || category.includes('藝術與表演')) return 2;
@@ -889,7 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const sessionCounts = {1: 0, 2: 0, 3: 0, 4: 0};
         
         list.forEach(item => {
-            item.targetSession = getCategorySession(item.category);
+            item.targetSession = getCategorySession(item);
             if (item.targetSession) {
                 sessionCounts[item.targetSession]++;
             }
