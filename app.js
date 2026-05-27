@@ -763,13 +763,27 @@ document.addEventListener('DOMContentLoaded', () => {
                     pushHistory();
                     
                     const merged = parsed.map(newP => {
-                        // 嘗試尋找相同的學生組合
-                        const existingP = presentations.find(oldP => oldP.presenters === newP.presenters);
+                        // 嘗試尋找相同的學生組合 (更強健的比對方式：用第一位學生的名字)
+                        let firstStudent = '';
+                        const match = newP.presenters.match(/\]\s*([^\(,\s]+)/);
+                        if (match) firstStudent = match[1];
+
+                        const existingP = presentations.find(oldP => oldP.presenters.includes(firstStudent));
+                        
                         if (existingP) {
+                            let keptSession = existingP.session;
+                            
+                            // 強制 A 組特定名單學生回到第 2 節
+                            const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
+                            const isSpecial = specialStudents.some(s => newP.presenters.includes(s));
+                            if (isSpecial && keptSession !== 2 && keptSession !== 0) {
+                                keptSession = 2;
+                            }
+
                             return { 
                                 ...newP, 
                                 id: existingP.id, // Keep old ID
-                                session: existingP.session, 
+                                session: keptSession, 
                                 status: existingP.status, 
                                 comment: existingP.comment, 
                                 isRecommended: existingP.isRecommended, 
@@ -847,7 +861,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const seat = seatIdx !== -1 ? row[seatIdx] : '';
             const name = row[nameIdx];
             const topic = row[topicIdx];
-            const category = categoryIdx !== -1 && row[categoryIdx] ? row[categoryIdx].trim() : '未分類';
+            let category = categoryIdx !== -1 && row[categoryIdx] ? row[categoryIdx].trim() : '未分類';
+
+            // 匯入時如果沒有分類，立刻從內建資料庫中尋找這個學生的最新分類
+            if (category === '未分類' && typeof mockPresentations !== 'undefined') {
+                const mockP = mockPresentations.find(m => m.presenters.includes(name));
+                if (mockP && mockP.category && mockP.category !== '未分類') {
+                    category = mockP.category;
+                }
+            }
 
             if (clazz === '班級' || !clazz || !topic || !name) continue;
 
