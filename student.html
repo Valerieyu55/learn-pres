@@ -508,9 +508,19 @@
             <main class="form-card">
                 <h3><i class="fa-solid fa-pen-nib"></i> 填寫回饋表單</h3>
                 <form id="student-feedback-form">
-                    <div class="form-group">
-                        <label for="student-name">個人姓名 (請填寫正確全名)</label>
-                        <input type="text" id="student-name" placeholder="例如：林小明" required>
+                    <div class="form-group" style="display: flex; gap: 1rem;">
+                        <div style="flex: 1;">
+                            <label for="student-class">班級</label>
+                            <select id="student-class" required>
+                                <option value="">選擇班級...</option>
+                                <option value="1001">1001班</option>
+                                <option value="1002">1002班</option>
+                            </select>
+                        </div>
+                        <div style="flex: 2;">
+                            <label for="student-name">個人姓名 (請填寫正確全名)</label>
+                            <input type="text" id="student-name" placeholder="例如：林小明" required>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="session">聆聽堂次</label>
@@ -718,6 +728,7 @@
             const sessionSelect = document.getElementById('session');
             const topicSelect = document.getElementById('topic');
             const feedbackForm = document.getElementById('student-feedback-form');
+            const studentClassSelect = document.getElementById('student-class');
             const studentNameInput = document.getElementById('student-name');
             const contentTextarea = document.getElementById('content');
             const charNumSpan = document.getElementById('char-num');
@@ -766,6 +777,7 @@
             feedbackForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 
+                const studentClass = studentClassSelect.value;
                 const studentName = studentNameInput.value.trim();
                 
                 // Name validation against roster
@@ -786,6 +798,8 @@
                     return;
                 }
 
+                const finalStudentName = `${studentClass} ${inputNameClean}`;
+
                 const session = sessionSelect.value;
                 const topic = topicSelect.value;
                 const content = contentTextarea.value.trim();
@@ -797,7 +811,7 @@
 
                 const newFeedback = {
                     id: 'fb_' + Date.now(),
-                    studentName: inputNameClean,
+                    studentName: finalStudentName,
                     session: session,
                     topic: topic,
                     content: content,
