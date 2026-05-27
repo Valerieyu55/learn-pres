@@ -538,11 +538,14 @@ function getPresentations() {
     let parsed = JSON.parse(stored);
     let updated = false;
     // Map categories from mock data to handle legacy data without categories
+    // ONLY if the topic hasn't changed.
     parsed.forEach(p => {
       const mockP = mockPresentations.find(m => m.id === p.id);
       if (mockP && (!p.category || p.category === '未分類')) {
-        p.category = mockP.category;
-        updated = true;
+        if (p.topic === mockP.topic) {
+           p.category = mockP.category;
+           updated = true;
+        }
       }
     });
     if (updated) {
