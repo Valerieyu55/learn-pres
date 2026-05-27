@@ -465,7 +465,7 @@ const mockPresentations = [
     "session": 4,
     "status": "pending",
     "comment": "",
-    "category": "醫藥生科與數理化學群"
+    "category": "財經商管學群"
   },
   {
     "id": "p_15",
