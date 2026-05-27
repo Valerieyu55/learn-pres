@@ -95,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnImportCsv = document.getElementById('btn-import-csv');
     const csvFileInput = document.getElementById('csv-file-input');
     const btnExportCsv = document.getElementById('btn-export-csv');
-    const btnReset = document.getElementById('btn-reset');
     const btnUndo = document.getElementById('btn-undo');
     const btnRedo = document.getElementById('btn-redo');
 
@@ -903,56 +902,6 @@ document.addEventListener('DOMContentLoaded', () => {
             };
         });
     }
-
-    // --- Reset Logic ---
-    btnReset.addEventListener('click', () => {
-        if (confirm('確定要清除所有調整紀錄、評語與學生回饋，重置為初始狀態嗎？此動作將保留您最新匯入的主題與分類。')) {
-            // Keep current presentations but reset statuses, comments, and redistribute sessions
-            const currentPresentations = presentations.length > 0 ? presentations : getPresentations();
-            
-            // Interleave logic for reset
-            function getClassStr(p) {
-                if (p.presenters.includes('[1001]')) return '1001';
-                if (p.presenters.includes('[1002]')) return '1002';
-                return 'unknown';
-            }
-
-            const class1 = currentPresentations.filter(p => getClassStr(p) === '1001');
-            const class2 = currentPresentations.filter(p => getClassStr(p) === '1002');
-            const unk = currentPresentations.filter(p => getClassStr(p) === 'unknown');
-
-            const interleavedList = [];
-            let i = 0, j = 0;
-            while (i < class1.length || j < class2.length) {
-                if (i < class1.length) interleavedList.push(class1[i++]);
-                if (j < class2.length) interleavedList.push(class2[j++]);
-            }
-            interleavedList.push(...unk);
-
-            presentations = interleavedList.map((item, idx) => {
-                const session = (idx % 4) + 1;
-                return {
-                    ...item,
-                    session: session,
-                    status: 'pending',
-                    comment: '',
-                    isRecommended: false,
-                    duration: 0
-                };
-            });
-
-            savePresentations(presentations);
-
-            localStorage.removeItem('feedbacks');
-            feedbacks = getFeedbacks();
-            
-            // Re-render
-            renderBoard();
-            renderTeacherFeedbacks();
-            
-            alert('系統已恢復至初始排程狀態，並保留了您最新匯入的主題與分類。');
-        }
-    });
 
     // --- Interleave Logic ---
     const btnInterleave = document.getElementById('btn-interleave');
