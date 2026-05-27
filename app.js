@@ -853,12 +853,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (clazz === '班級' || !clazz || !topic || !name) continue;
 
             const isIndividual = row.some(cell => typeof cell === 'string' && cell.includes('個人'));
-            const key = isIndividual ? `${clazz}_${topic}_${name}_${seat}` : `${clazz}_${topic}`;
+            const key = isIndividual ? `${clazz}_${topic}_${name}_${seat}` : `${topic}`;
 
             if (seen.has(key)) {
                 const p = list.find(x => x._key === key);
                 if (p) {
-                    const presenterStr = `${name}${seat ? ` (${seat})` : ''}`;
+                    const presenterStr = `[${clazz}] ${name}${seat ? ` (${seat})` : ''}`;
                     if (!p.presenters.includes(presenterStr)) {
                         p.presenters.push(presenterStr);
                     }
@@ -872,7 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     _key: key,
                     class: clazz,
                     topic: topic,
-                    presenters: [`${name}${seat ? ` (${seat})` : ''}`],
+                    presenters: [`[${clazz}] ${name}${seat ? ` (${seat})` : ''}`],
                     category: category
                 });
             }
@@ -895,7 +895,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return {
                 id: `p_${Date.now()}_${idx + 1}`,
                 topic: item.topic,
-                presenters: `[${item.class}] ` + item.presenters.join(', '),
+                presenters: item.presenters.join(', '),
                 session: session,
                 status: 'pending',
                 comment: '',
@@ -1031,31 +1031,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const students = [];
         const seen = new Set();
         pList.forEach(p => {
-            const match = p.presenters.match(/^\[([^\]]+)\]\s*(.*)$/);
-            if (match) {
-                const className = match[1];
-                const namesPart = match[2];
-                const parts = namesPart.split(',');
-                parts.forEach(part => {
-                    const text = part.trim();
-                    if (!text) return;
-                    const seatMatch = text.match(/^([^\(]+)(?:\((\d+)\))?$/);
-                    if (seatMatch) {
-                        const name = seatMatch[1].trim();
-                        const seat = seatMatch[2] ? seatMatch[2].trim() : '';
-                        const fullName = `${className}-${seat.padStart(2, '0')} ${name}`;
-                        if (!seen.has(fullName)) {
-                            seen.add(fullName);
-                            students.push({
-                                class: className,
-                                seat: seat,
-                                name: name,
-                                fullName: fullName
-                            });
-                        }
+            const parts = p.presenters.split(',');
+            let currentClass = '';
+            
+            parts.forEach(part => {
+                let text = part.trim();
+                if (!text) return;
+                
+                const classMatch = text.match(/^\[([^\]]+)\]\s*(.*)$/);
+                if (classMatch) {
+                    currentClass = classMatch[1];
+                    text = classMatch[2];
+                }
+                
+                if (!currentClass) return;
+
+                const seatMatch = text.match(/^([^\(]+)(?:\((\d+)\))?$/);
+                if (seatMatch) {
+                    const name = seatMatch[1].trim();
+                    const seat = seatMatch[2] ? seatMatch[2].trim() : '';
+                    const fullName = `${currentClass}-${seat.padStart(2, '0')} ${name}`;
+                    if (!seen.has(fullName)) {
+                        seen.add(fullName);
+                        students.push({
+                            class: currentClass,
+                            seat: seat,
+                            name: name,
+                            fullName: fullName
+                        });
                     }
-                });
-            }
+                }
+            });
         });
         students.sort((a, b) => a.fullName.localeCompare(b.fullName));
         return students;

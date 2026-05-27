@@ -254,8 +254,8 @@ const mockPresentations = [
   {
     "id": "p_37",
     "topic": "冷次定律與渦電流煞車的定量研究",
-    "presenters": "[1002] 郭聿安 (13)",
-    "session": 2,
+    "presenters": "[1002] 郭聿安 (13), [1001] 江安妤 (26), 沈毓庭 (29)",
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "醫藥生科與數理化學群"
@@ -423,19 +423,10 @@ const mockPresentations = [
     "category": "資訊工程學群"
   },
   {
-    "id": "p_14",
-    "topic": "冷次定律與渦電流煞車的定量研究",
-    "presenters": "[1001] 江安妤 (26), 沈毓庭 (29)",
-    "session": 4,
-    "status": "pending",
-    "comment": "",
-    "category": "醫藥生科與數理化學群"
-  },
-  {
     "id": "p_8",
     "topic": "不同水質對生植物生長與發芽表現之影響探討",
-    "presenters": "[1001] 張廷愷 (11), 楊明叡 (16)",
-    "session": 4,
+    "presenters": "[1001] 張廷愷 (11), 楊明叡 (16), [1002] 謝詠煜 (21)",
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "醫藥生科與數理化學群"
@@ -444,15 +435,6 @@ const mockPresentations = [
     "id": "p_11",
     "topic": "自然專題-乾旱壓力對植物氣孔關閉動力學與壓力記憶之研究",
     "presenters": "[1001] 陳宜宏 (14), 吳育宣 (28), 陳子甯 (36)",
-    "session": 4,
-    "status": "pending",
-    "comment": "",
-    "category": "醫藥生科與數理化學群"
-  },
-  {
-    "id": "p_42",
-    "topic": "不同水質對生植物生長與發芽表現之影響探討",
-    "presenters": "[1002] 謝詠煜 (21)",
     "session": 4,
     "status": "pending",
     "comment": "",
