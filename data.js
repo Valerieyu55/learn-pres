@@ -138,7 +138,7 @@ const mockPresentations = [
     "id": "p_3",
     "topic": "投資理財",
     "presenters": "[1001] 江雋凱 (3), 林宏銘 (7), 陳昱安 (9), 潘奕劭 (17)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -147,7 +147,7 @@ const mockPresentations = [
     "id": "p_38",
     "topic": "投資理財學",
     "presenters": "[1002] 郭萬霖 (14)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -156,7 +156,7 @@ const mockPresentations = [
     "id": "p_38_1",
     "topic": "投資理財學",
     "presenters": "[1002] 林煒宬 (16)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -165,7 +165,7 @@ const mockPresentations = [
     "id": "p_3_1",
     "topic": "投資理財",
     "presenters": "[1001] 傅天禹 (15)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -174,7 +174,7 @@ const mockPresentations = [
     "id": "p_46",
     "topic": "高中生理財與省錢小技巧",
     "presenters": "[1002] 林知柔 (28)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -183,7 +183,7 @@ const mockPresentations = [
     "id": "p_12",
     "topic": "最低薪資調漲會怎麼影響失業率",
     "presenters": "[1001] 蕭昂森 (18), 江昀潔 (27)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -192,7 +192,7 @@ const mockPresentations = [
     "id": "p_26",
     "topic": "自主學習股票",
     "presenters": "[1002] 王晨宇 (2)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -201,7 +201,7 @@ const mockPresentations = [
     "id": "p_2",
     "topic": "分析NBA隊伍擴建",
     "presenters": "[1001] 王舜傑 (2), 李晧瑋 (6)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -210,7 +210,7 @@ const mockPresentations = [
     "id": "p_29",
     "topic": "消費心理學",
     "presenters": "[1002] 朱立恩 (5)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "財經商管學群"
@@ -228,7 +228,7 @@ const mockPresentations = [
     "id": "p_5",
     "topic": "十字翻轉棋",
     "presenters": "[1001] 李建頡 (5), 張依璇 (34)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "資訊工程學群"
@@ -271,18 +271,27 @@ const mockPresentations = [
   },
   {
     "id": "p_52",
-    "topic": "紅樓夢觀後感",
-    "presenters": "[1002] 陳意喬 (35), 蔡侑庭 (40)",
-    "session": 3,
+    "topic": "從MBTI熱潮看現代人的自我認同與社交心理學",
+    "presenters": "[1002] 陳意喬 (35)",
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "文史哲與法政學群"
   },
   {
+    "id": "p_52_2",
+    "topic": "日文自學",
+    "presenters": "[1002] 蔡侑庭 (40)",
+    "session": 1,
+    "status": "pending",
+    "comment": "",
+    "category": "外語與檢定學群"
+  },
+  {
     "id": "p_30",
     "topic": "AREE(台灣學術倫理教育研究中心)修課",
     "presenters": "[1002] 江瑋宸 (6)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "文史哲與法政學群"
@@ -291,7 +300,7 @@ const mockPresentations = [
     "id": "p_13",
     "topic": "俄文學習",
     "presenters": "[1001] 蘇雋博 (20)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "外語與檢定學群"
@@ -300,7 +309,7 @@ const mockPresentations = [
     "id": "p_27",
     "topic": "自學Bach Partita No.3",
     "presenters": "[1002] 王湧碩 (3)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與表演學群"
@@ -309,7 +318,7 @@ const mockPresentations = [
     "id": "p_1",
     "topic": "踢踏舞比賽準備歷程與自主訓練管理",
     "presenters": "[1001] 王昊祐 (1)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與表演學群"
@@ -318,7 +327,7 @@ const mockPresentations = [
     "id": "p_45",
     "topic": "中國笛-合奏進行中",
     "presenters": "[1002] 林于安 (27), 劉晁媖 (38)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與表演學群"
@@ -327,7 +336,7 @@ const mockPresentations = [
     "id": "p_43",
     "topic": "琴、音樂與我的自我救贖",
     "presenters": "[1002] 涂維凱 (22)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與表演學群"
@@ -336,7 +345,7 @@ const mockPresentations = [
     "id": "p_16",
     "topic": "素描與其他繪畫練習",
     "presenters": "[1001] 徐正玲 (32)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -345,7 +354,7 @@ const mockPresentations = [
     "id": "p_50",
     "topic": "版畫製作",
     "presenters": "[1002] 陳怡臻 (32)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -354,7 +363,7 @@ const mockPresentations = [
     "id": "p_4",
     "topic": "從0開始打造一間禮服",
     "presenters": "[1001] 吳楚昱 (4)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -363,7 +372,7 @@ const mockPresentations = [
     "id": "p_55",
     "topic": "電繪設計實作",
     "presenters": "[1002] 蔡睿芸 (41)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -372,7 +381,7 @@ const mockPresentations = [
     "id": "p_7",
     "topic": "銳品香水的等級",
     "presenters": "[1001] 施力豪 (10), 林巧耘 (30), 蘇楷云 (44)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -381,7 +390,7 @@ const mockPresentations = [
     "id": "p_57",
     "topic": "個人視覺化作品集",
     "presenters": "[1002] 謝舒婷 (44)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -390,7 +399,7 @@ const mockPresentations = [
     "id": "p_22",
     "topic": "花藝美感探索：透過花藝體驗課",
     "presenters": "[1001] 黃畇硯 (41)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "藝術與設計學群"
@@ -399,7 +408,7 @@ const mockPresentations = [
     "id": "p_24",
     "topic": "學科精進",
     "presenters": "[1001] 龔芃朵 (45)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "課業深化與學科精進"
@@ -453,7 +462,7 @@ const mockPresentations = [
     "id": "p_15",
     "topic": "解剖學",
     "presenters": "[1001] 林詠潔 (31), 楊佑澧 (42)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "醫藥生科與數理化學群"
@@ -462,7 +471,7 @@ const mockPresentations = [
     "id": "p_39",
     "topic": "段考數學加強",
     "presenters": "[1002] 陳亮宇 (15)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "醫藥生科與數理化學群"
@@ -471,7 +480,7 @@ const mockPresentations = [
     "id": "p_6",
     "topic": "科學與跑步的關係",
     "presenters": "[1001] 林紘安 (8), 賴煜翔 (19)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "體育與休閒管理"
@@ -480,7 +489,7 @@ const mockPresentations = [
     "id": "p_40",
     "topic": "游泳技巧",
     "presenters": "[1002] 潘奕廷 (19)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "體育與休閒管理"
@@ -489,7 +498,7 @@ const mockPresentations = [
     "id": "p_17",
     "topic": "不同運動強度下賽前營養補充之影響",
     "presenters": "[1001] 張丞妘 (33)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "體育與休閒管理"
@@ -498,7 +507,7 @@ const mockPresentations = [
     "id": "p_35",
     "topic": "明年單車一日北高長征計劃",
     "presenters": "[1002] 張廷碩 (11)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "體育與休閒管理"
@@ -507,7 +516,7 @@ const mockPresentations = [
     "id": "p_10",
     "topic": "鐵人三項",
     "presenters": "[1001] 陳丹 (13)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "體育與休閒管理"
@@ -516,24 +525,33 @@ const mockPresentations = [
 
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
+  const storedMockHash = localStorage.getItem('mockPresentationsHash');
+  const currentMockHash = JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category })));
+
   if (stored) {
     let parsed = JSON.parse(stored);
     let updated = false;
-    parsed.forEach(p => {
-      // 抽取第一位學生的純姓名來比對（忽略班級與座號標籤），提高容錯率
-      let studentName = '';
-      const match = p.presenters.match(/\]\s*([^\(,\s]+)/);
-      if (match) studentName = match[1];
-      
-      const mockP = mockPresentations.find(m => m.presenters.includes(studentName));
-      if (mockP) {
-        if (p.topic !== mockP.topic || p.category !== mockP.category) {
-           p.topic = mockP.topic;
-           p.category = mockP.category;
-           updated = true;
-        }
-      }
+    
+    // 只有當 data.js 裡的 mockPresentations 真的是被手動修改過時，才進行同步覆蓋
+    if (storedMockHash !== currentMockHash) {
+        parsed.forEach(p => {
+          let studentName = '';
+          const match = p.presenters.match(/\]\s*([^\(,\s]+)/);
+          if (match) studentName = match[1];
+          
+          const mockP = mockPresentations.find(m => m.presenters.includes(studentName));
+          if (mockP) {
+            if (p.topic !== mockP.topic || p.category !== mockP.category) {
+               p.topic = mockP.topic;
+               p.category = mockP.category;
+               updated = true;
+            }
+          }
+        });
+        localStorage.setItem('mockPresentationsHash', currentMockHash);
+    }
 
+    parsed.forEach(p => {
       // 強制 A 組特定名單的學生回到第 2 節
       const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
       const isSpecial = specialStudents.some(s => p.presenters.includes(s));
@@ -547,6 +565,7 @@ function getPresentations() {
     }
     return parsed;
   }
+  localStorage.setItem('mockPresentationsHash', currentMockHash);
   localStorage.setItem('presentations', JSON.stringify(mockPresentations));
   return mockPresentations;
 }
