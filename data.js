@@ -575,6 +575,20 @@ function getPresentations() {
     });
     parsed = uniqueParsed;
 
+    // 名單防遺漏機制 (Self-healing): 檢查 mockPresentations 裡是否有學生不在 parsed 裡面，如果有則補回來
+    mockPresentations.forEach(mockP => {
+        // 取出這組的第一個學生名字來比對
+        let firstStudent = '';
+        const match = mockP.presenters.match(/\]\s*([^\(,\s]+)/);
+        if (match) firstStudent = match[1];
+
+        const exists = parsed.some(p => p.presenters.includes(firstStudent));
+        if (!exists) {
+            parsed.push({ ...mockP });
+            updated = true;
+        }
+    });
+
     if (updated) {
       localStorage.setItem('presentations', JSON.stringify(parsed));
     }

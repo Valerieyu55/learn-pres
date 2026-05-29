@@ -361,15 +361,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateStats() {
-        const uniqueStudents = new Set();
+        let studentCount = 0;
         presentations.forEach(p => {
             const parts = p.presenters.split(/[,，]/);
             parts.forEach(part => {
-                const name = part.trim();
-                if (name) uniqueStudents.add(name);
+                if (part.trim()) studentCount++;
             });
         });
-        const studentCount = uniqueStudents.size;
 
         const total = presentations.length;
         const completed = presentations.filter(p => p.status === 'completed').length;
