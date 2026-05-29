@@ -21,7 +21,7 @@ const mockPresentations = [
     "id": "p_1780042813531_3",
     "topic": "分析NBA隊伍擴建",
     "presenters": "[1001] 王舜傑 (2), [1001] 李晧瑋 (6)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -30,7 +30,7 @@ const mockPresentations = [
     "id": "p_1780042813531_4",
     "topic": "自主學習股票",
     "presenters": "[1002] 王晨宇 (2)",
-    "session": 3,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -48,7 +48,7 @@ const mockPresentations = [
     "id": "p_1780042813531_6",
     "topic": "自學Bach Partita No.3",
     "presenters": "[1002] 王湧碩 (3)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -57,7 +57,7 @@ const mockPresentations = [
     "id": "p_1780042813531_7",
     "topic": "從0開始打造一間禮服",
     "presenters": "[1001] 吳楚昱 (4)",
-    "session": 1,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -84,7 +84,7 @@ const mockPresentations = [
     "id": "p_1780042813531_10",
     "topic": "消費心理學",
     "presenters": "[1002] 朱立恩 (5)",
-    "session": 1,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -93,7 +93,7 @@ const mockPresentations = [
     "id": "p_1780042813531_11",
     "topic": "科學與跑步的關係",
     "presenters": "[1001] 林紘安 (8), [1001] 賴煜翔 (19)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -102,7 +102,7 @@ const mockPresentations = [
     "id": "p_1780042813531_12",
     "topic": "AREE(台灣學術倫理教育研究中心)修課",
     "presenters": "[1002] 江瑋宸 (6)",
-    "session": 2,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -111,7 +111,7 @@ const mockPresentations = [
     "id": "p_1780042813531_13",
     "topic": "投資理財相關研究",
     "presenters": "[1001] 陳昱安 (9), [1001] 傅天禹 (15)",
-    "session": 1,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -120,7 +120,7 @@ const mockPresentations = [
     "id": "p_1780042813531_14",
     "topic": "西語",
     "presenters": "[1002] 沈稚荏 (7)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -165,7 +165,7 @@ const mockPresentations = [
     "id": "p_1780042813531_19",
     "topic": "YouTube頻道經營及動畫影片創作",
     "presenters": "[1001] 張岱亨 (12)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -183,7 +183,7 @@ const mockPresentations = [
     "id": "p_1780042813531_21",
     "topic": "鐵人三項",
     "presenters": "[1001] 陳丹 (13)",
-    "session": 1,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -192,7 +192,7 @@ const mockPresentations = [
     "id": "p_1780042813531_22",
     "topic": "明年單車一日北高長征計劃",
     "presenters": "[1002] 張廷碩 (11)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -210,7 +210,7 @@ const mockPresentations = [
     "id": "p_1780042813531_24",
     "topic": "準備APCS",
     "presenters": "[1002] 梁文嘉 (12)",
-    "session": 1,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -219,7 +219,7 @@ const mockPresentations = [
     "id": "p_1780042813531_25",
     "topic": "最低薪資調漲會怎麼影響失業率",
     "presenters": "[1001] 蕭昂森 (18), [1001] 江昀潔 (27)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -228,7 +228,7 @@ const mockPresentations = [
     "id": "p_1780042813531_26",
     "topic": "投資理財學",
     "presenters": "[1002] 郭萬霖 (14)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -237,7 +237,7 @@ const mockPresentations = [
     "id": "p_1780042813531_27",
     "topic": "俄文學習",
     "presenters": "[1001] 蘇雋博 (20)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -246,7 +246,7 @@ const mockPresentations = [
     "id": "p_1780042813531_28",
     "topic": "段考數學加強",
     "presenters": "[1002] 陳亮宇 (15)",
-    "session": 3,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -273,7 +273,7 @@ const mockPresentations = [
     "id": "p_1780042813531_31",
     "topic": "解剖學",
     "presenters": "[1001] 林詠潔 (31), [1001] 楊佑澧 (42)",
-    "session": 1,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -282,7 +282,7 @@ const mockPresentations = [
     "id": "p_1780042813531_32",
     "topic": "游泳技巧",
     "presenters": "[1002] 潘奕廷 (19)",
-    "session": 1,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -291,7 +291,7 @@ const mockPresentations = [
     "id": "p_1780042813531_33",
     "topic": "素描與其他繪畫練習",
     "presenters": "[1001] 徐正玲 (32)",
-    "session": 3,
+    "session": 0,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -300,7 +300,7 @@ const mockPresentations = [
     "id": "p_1780042813531_34",
     "topic": "日文自學",
     "presenters": "[1002] 賴泓劭 (20)",
-    "session": 2,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -345,7 +345,7 @@ const mockPresentations = [
     "id": "p_1780042813531_39",
     "topic": "N5日文養成中",
     "presenters": "[1001] 陳妍熹 (37)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -381,7 +381,7 @@ const mockPresentations = [
     "id": "p_1780042813531_43",
     "topic": "TCK第三文化小孩之研究",
     "presenters": "[1001] 曾行 (39)",
-    "session": 1,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -390,7 +390,7 @@ const mockPresentations = [
     "id": "p_1780042813531_44",
     "topic": "財經金融管理",
     "presenters": "[1002] 邱歆宸 (29)",
-    "session": 3,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -408,7 +408,7 @@ const mockPresentations = [
     "id": "p_1780042813531_46",
     "topic": "影像剪輯學習",
     "presenters": "[1002] 張心妮 (30), [1002] 潘柔涵 (39)",
-    "session": 4,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -417,7 +417,7 @@ const mockPresentations = [
     "id": "p_1780042813531_47",
     "topic": "準備雅思",
     "presenters": "[1001] 錢安婕 (43)",
-    "session": 4,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -435,7 +435,7 @@ const mockPresentations = [
     "id": "p_1780042813531_49",
     "topic": "自學橋牌",
     "presenters": "[1001] 龔芃朵 (45)",
-    "session": 1,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -444,7 +444,7 @@ const mockPresentations = [
     "id": "p_1780042813531_50",
     "topic": "版畫製作",
     "presenters": "[1002] 陳怡臻 (32)",
-    "session": 2,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -453,7 +453,7 @@ const mockPresentations = [
     "id": "p_1780042813531_51",
     "topic": "透過影視作品看社會議題",
     "presenters": "[1002] 陳宣竹 (33)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -462,7 +462,7 @@ const mockPresentations = [
     "id": "p_1780042813531_52",
     "topic": "從MBTI熱潮看現代人的自我認同與社交心理學",
     "presenters": "[1002] 陳意喬 (35)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -480,7 +480,7 @@ const mockPresentations = [
     "id": "p_1780042813531_54",
     "topic": "立法精神及修正",
     "presenters": "[1002] 劉家安 (37)",
-    "session": 2,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -489,7 +489,7 @@ const mockPresentations = [
     "id": "p_1780042813531_55",
     "topic": "日文自學",
     "presenters": "[1002] 蔡侑庭 (40)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -498,7 +498,7 @@ const mockPresentations = [
     "id": "p_1780042813531_56",
     "topic": "電繪設計實作",
     "presenters": "[1002] 蔡睿芸 (41)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -516,7 +516,7 @@ const mockPresentations = [
     "id": "p_1780042813531_58",
     "topic": "個人視覺化作品集",
     "presenters": "[1002] 謝舒婷 (44)",
-    "session": 2,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
