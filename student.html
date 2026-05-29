@@ -526,10 +526,10 @@
                         <label for="session">聆聽堂次</label>
                         <select id="session" required>
                             <option value="">請選擇堂次...</option>
-                            <option value="1">第一節課 (Session 1)</option>
-                            <option value="2">第二節課 (Session 2)</option>
-                            <option value="3">第三節課 (Session 3)</option>
-                            <option value="4">第四節課 (Session 4)</option>
+                            <option value="1">第一節 6/1(一) (Session 1)</option>
+                            <option value="2">第二節 6/3(三) (Session 2)</option>
+                            <option value="3">第三節 6/8(一) (Session 3)</option>
+                            <option value="4">第四節 6/10(三) (Session 4)</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -558,10 +558,10 @@
                     </h3>
                     <select id="wall-session-filter" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--primary); font-weight: bold; outline: none; cursor: pointer;">
                         <option value="all">顯示所有堂次</option>
-                        <option value="1">只顯示第一節課</option>
-                        <option value="2">只顯示第二節課</option>
-                        <option value="3">只顯示第三節課</option>
-                        <option value="4">只顯示第四節課</option>
+                        <option value="1">只顯示 第一節 6/1(一)</option>
+                        <option value="2">只顯示 第二節 6/3(三)</option>
+                        <option value="3">只顯示 第三節 6/8(一)</option>
+                        <option value="4">只顯示 第四節 6/10(三)</option>
                     </select>
                 </div>
                 <div class="feedbacks-grid" id="feedbacks-grid">
@@ -608,7 +608,8 @@
                     col.dataset.session = i;
                     
                     const dateVal = localStorage.getItem(`scheduleDate_${i}`) || '';
-                    const locVal = localStorage.getItem(`scheduleLoc_${i}`) || '';
+                    const defaultLoc = i === 1 ? '小劇場' : '多功能教室1';
+                    const locVal = localStorage.getItem(`scheduleLoc_${i}`) || defaultLoc;
                     
                     const dateStr = dateVal ? `<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 700; color: #D97706; background-color: #FEF3C7; padding: 6px 12px; border-radius: 8px; border: 1px solid #FCD34D; box-shadow: 0 2px 4px rgba(217, 119, 6, 0.1);"><i class="fa-regular fa-calendar"></i> ${dateVal}</span>` : '';
                     const locStr = locVal ? `<span style="display: inline-flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: 700; color: #0369A1; background-color: #E0F2FE; padding: 6px 12px; border-radius: 8px; border: 1px solid #BAE6FD; box-shadow: 0 2px 4px rgba(3, 105, 161, 0.1);"><i class="fa-solid fa-location-dot"></i> ${locVal}</span>` : '';
@@ -616,7 +617,7 @@
                     col.innerHTML = `
                         <div class="column-header" style="flex-direction: column; align-items: flex-start; gap: 12px;">
                             <div class="column-title">
-                                <h3 style="display: flex; flex-wrap: wrap; align-items: center; font-size: 1.25rem;">第 ${i} 節 (Session ${i})</h3>
+                                <h3 style="display: flex; flex-wrap: wrap; align-items: center; font-size: 1.25rem;">${i === 1 ? '第一節 6/1(一)' : i === 2 ? '第二節 6/3(三)' : i === 3 ? '第三節 6/8(一)' : '第四節 6/10(三)'} (Session ${i})</h3>
                             </div>
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 ${dateStr}
@@ -637,8 +638,6 @@
                             const seq = sessionCounters[p.session]++;
                             const card = document.createElement('div');
                             card.className = 'presentation-card';
-                            const catStr = p.category && p.category !== '未分類' ? `<span style="display:inline-block; font-size:0.7rem; background:rgba(168,184,160,0.15); color:#66735e; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(168,184,160,0.3); vertical-align:middle; font-weight:700;">${p.category}</span>` : '';
-                            
                             const displayTopic = `<span>${p.topic}</span>`;
 
                             let extraContent = '';
@@ -658,7 +657,6 @@
                                 <div class="card-title" style="display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
                                     <span style="display:inline-block; background-color:var(--accent); color:white; min-width:20px; height:20px; text-align:center; border-radius:10px; font-size:0.75rem; line-height:20px; padding: 0 4px; margin-right:4px; vertical-align: middle; box-shadow: 0 2px 4px rgba(200,159,122,0.3);">${seq}</span>
                                     ${displayTopic}
-                                    ${catStr}
                                 </div>
                                 <div class="card-desc">
                                     <i class="fa-solid fa-users"></i>
@@ -677,7 +675,8 @@
                     for (let i = 1; i <= 4; i++) {
                         const dateVal = localStorage.getItem(`scheduleDate_${i}`) || '';
                         const dateStr = dateVal ? ` (${dateVal})` : '';
-                        scheduleFilter.innerHTML += `<option value="${i}">第 ${i} 節${dateStr}</option>`;
+                        const dateLabel = i === 1 ? '第一節 6/1(一)' : i === 2 ? '第二節 6/3(三)' : i === 3 ? '第三節 6/8(一)' : '第四節 6/10(三)';
+                        scheduleFilter.innerHTML += `<option value="${i}">${dateLabel}${dateStr}</option>`;
                     }
                     
                     scheduleFilter.addEventListener('change', (e) => {
@@ -767,8 +766,7 @@
                 sessionPresentations.forEach(p => {
                     const opt = document.createElement('option');
                     opt.value = p.topic;
-                    const catStr = p.category && p.category !== '未分類' ? `[${p.category}] ` : '';
-                    opt.textContent = `${catStr}${p.topic} (${cleanPresenters(p.presenters)})`;
+                    opt.textContent = `${p.topic} (${cleanPresenters(p.presenters)})`;
                     topicSelect.appendChild(opt);
                 });
             });

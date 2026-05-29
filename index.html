@@ -40,16 +40,11 @@
             </nav>
             
             <div class="sidebar-footer">
-                <input type="file" id="csv-file-input" accept=".csv" style="display: none;">
-                <button id="btn-import-csv" class="footer-btn">
-                    <i class="fa-solid fa-file-import"></i> <span>匯入學生 CSV</span>
-                </button>
                 <button id="btn-export-csv" class="footer-btn">
                     <i class="fa-solid fa-file-export"></i> <span>匯出為 Excel</span>
                 </button>
-                <button id="btn-reassign-sessions" class="footer-btn text-primary">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> <span>依學群重新分配場次</span>
-                </button>
+
+            </div>
         </aside>
 
         <!-- 主體內容區 (上方標題 + 老師儀表板 + 看板) -->
@@ -75,6 +70,13 @@
                 <div id="kanban-view" class="view-panel active">
                     <!-- 3. 老師端儀表板 (統計卡片) -->
                     <section class="teacher-dashboard">
+                        <div class="stat-card">
+                            <div class="stat-icon" style="background-color: #E0E7FF; color: #4338CA;"><i class="fa-solid fa-user-graduate"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">學生總人數</span>
+                                <span class="stat-value" id="stat-students">0</span>
+                            </div>
+                        </div>
                         <div class="stat-card">
                             <div class="stat-icon info"><i class="fa-solid fa-users"></i></div>
                             <div class="stat-info">
@@ -130,13 +132,13 @@
                                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                                         <div class="column-title" style="margin-bottom: 0;">
                                             <span class="session-badge">Session 1</span>
-                                            <h3>第一節 (45分)</h3>
+                                            <h3>第一節 6/1(一) 小劇場 (45分)</h3>
                                         </div>
-                                        <span class="count-badge">0</span>
+                                        <span class="count-badge">0 組</span>
                                     </div>
                                     <div style="width: 100%; display: flex; gap: 4px;">
                                         <input type="date" class="session-date-input" data-session="1" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
-                                        <input type="text" class="session-loc-input" data-session="1" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                        <input type="text" class="session-loc-input" data-session="1" placeholder="地點" value="小劇場" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
                                     </div>
                                 </div>
                                 <div class="column-body drag-container"></div>
@@ -147,13 +149,13 @@
                                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                                         <div class="column-title" style="margin-bottom: 0;">
                                             <span class="session-badge">Session 2</span>
-                                            <h3>第二節 (45分)</h3>
+                                            <h3>第二節 6/3(三) 多功能教室1 (45分)</h3>
                                         </div>
-                                        <span class="count-badge">0</span>
+                                        <span class="count-badge">0 組</span>
                                     </div>
                                     <div style="width: 100%; display: flex; gap: 4px;">
                                         <input type="date" class="session-date-input" data-session="2" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
-                                        <input type="text" class="session-loc-input" data-session="2" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                        <input type="text" class="session-loc-input" data-session="2" placeholder="地點" value="多功能教室1" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
                                     </div>
                                 </div>
                                 <div class="column-body drag-container"></div>
@@ -164,13 +166,13 @@
                                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                                         <div class="column-title" style="margin-bottom: 0;">
                                             <span class="session-badge">Session 3</span>
-                                            <h3>第三節 (45分)</h3>
+                                            <h3>第三節 6/8(一) 多功能教室1 (45分)</h3>
                                         </div>
-                                        <span class="count-badge">0</span>
+                                        <span class="count-badge">0 組</span>
                                     </div>
                                     <div style="width: 100%; display: flex; gap: 4px;">
                                         <input type="date" class="session-date-input" data-session="3" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
-                                        <input type="text" class="session-loc-input" data-session="3" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                        <input type="text" class="session-loc-input" data-session="3" placeholder="地點" value="多功能教室1" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
                                     </div>
                                 </div>
                                 <div class="column-body drag-container"></div>
@@ -181,13 +183,13 @@
                                     <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
                                         <div class="column-title" style="margin-bottom: 0;">
                                             <span class="session-badge">Session 4</span>
-                                            <h3>第四節 (45分)</h3>
+                                            <h3>第四節 6/10(三) 多功能教室1 (45分)</h3>
                                         </div>
-                                        <span class="count-badge">0</span>
+                                        <span class="count-badge">0 組</span>
                                     </div>
                                     <div style="width: 100%; display: flex; gap: 4px;">
                                         <input type="date" class="session-date-input" data-session="4" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark);">
-                                        <input type="text" class="session-loc-input" data-session="4" placeholder="地點" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
+                                        <input type="text" class="session-loc-input" data-session="4" placeholder="地點" value="多功能教室1" style="flex: 1; padding: 2px 4px; font-size: 0.75rem; border: 1px solid var(--border); border-radius: 4px; outline: none; color: var(--text-dark); width: 60px;">
                                     </div>
                                 </div>
                                 <div class="column-body drag-container"></div>
@@ -205,7 +207,7 @@
                                             <option value="all">所有班級</option>
                                         </select>
                                     </div>
-                                    <span class="count-badge">0</span>
+                                    <span class="count-badge">0 組</span>
                                 </div>
                                 <div class="column-body drag-container"></div>
                             </div>
@@ -223,10 +225,10 @@
                         </div>
                         <select id="teacher-wall-session-filter" style="padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--primary); font-weight: bold; outline: none; cursor: pointer;">
                             <option value="all">顯示所有堂次</option>
-                            <option value="1">只顯示第一節課</option>
-                            <option value="2">只顯示第二節課</option>
-                            <option value="3">只顯示第三節課</option>
-                            <option value="4">只顯示第四節課</option>
+                            <option value="1">只顯示 第一節 6/1(一)</option>
+                            <option value="2">只顯示 第二節 6/3(三)</option>
+                            <option value="3">只顯示 第三節 6/8(一)</option>
+                            <option value="4">只顯示 第四節 6/10(三)</option>
                         </select>
                     </div>
                     <div class="feedback-grid" id="teacher-feedback-grid">
@@ -280,10 +282,10 @@
                                 <label style="font-size: 0.85rem; font-weight: bold; color: var(--primary);">選擇堂次：</label>
                                 <select id="submission-session-filter" style="padding: 0.4rem 0.8rem; border-radius: 6px; width: 160px; border: 1px solid var(--border); background-color: var(--surface); color: var(--primary); outline: none; font-size: 0.85rem;">
                                     <option value="">所有堂次</option>
-                                    <option value="1">第一節課 (Session 1)</option>
-                                    <option value="2">第二節課 (Session 2)</option>
-                                    <option value="3">第三節課 (Session 3)</option>
-                                    <option value="4">第四節課 (Session 4)</option>
+                                    <option value="1">第一節 6/1(一) (Session 1)</option>
+                                    <option value="2">第二節 6/3(三) (Session 2)</option>
+                                    <option value="3">第三節 6/8(一) (Session 3)</option>
+                                    <option value="4">第四節 6/10(三) (Session 4)</option>
                                 </select>
                             </div>
                         </div>
@@ -395,10 +397,10 @@
                     <div class="modal-form-group">
                         <label>分配場次</label>
                         <select id="modal-session-select" class="modal-input">
-                            <option value="1">第一節 (Session 1)</option>
-                            <option value="2">第二節 (Session 2)</option>
-                            <option value="3">第三節 (Session 3)</option>
-                            <option value="4">第四節 (Session 4)</option>
+                            <option value="1">第一節 6/1(一) (Session 1)</option>
+                            <option value="2">第二節 6/3(三) (Session 2)</option>
+                            <option value="3">第三節 6/8(一) (Session 3)</option>
+                            <option value="4">第四節 6/10(三) (Session 4)</option>
                             <option value="0">備用 / 延誤區</option>
                         </select>
                     </div>

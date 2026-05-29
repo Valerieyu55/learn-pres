@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const viewPanels = document.querySelectorAll('.view-panel');
     
     // Stats
+    const statStudents = document.getElementById('stat-students');
     const statTotal = document.getElementById('stat-total');
     const statCompleted = document.getElementById('stat-completed');
     const statPending = document.getElementById('stat-pending');
@@ -92,8 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // System Action Buttons
-    const btnImportCsv = document.getElementById('btn-import-csv');
-    const csvFileInput = document.getElementById('csv-file-input');
     const btnExportCsv = document.getElementById('btn-export-csv');
     const btnUndo = document.getElementById('btn-undo');
     const btnRedo = document.getElementById('btn-redo');
@@ -263,8 +262,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         div.innerHTML = `
             <div class="card-title">
-                <span style="display:inline-block; background-color:var(--accent); color:white; min-width:20px; height:20px; text-align:center; border-radius:10px; font-size:0.75rem; line-height:20px; padding: 0 4px; margin-right:4px; vertical-align: middle; box-shadow: 0 2px 4px rgba(200,159,122,0.3);">${seq}</span>${displayTopic}
-                ${p.category ? `<span style="display:inline-block; font-size:0.7rem; background:rgba(168,184,160,0.15); color:#66735e; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(168,184,160,0.3); vertical-align:middle; font-weight:700;">${p.category}</span>` : ''}
+                <input type="number" class="seq-input" data-id="${p.id}" value="${seq}" min="1" title="輸入數字可直接調整順序" style="width: 36px; height: 22px; text-align: center; background-color: var(--accent); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 11px; font-size: 0.8rem; margin-right: 4px; font-weight: bold; outline: none; cursor: text; vertical-align: middle;">${displayTopic}
+                ${p.category && p.category !== '未分類' ? `<span style="display:inline-block; font-size:0.7rem; background:rgba(168,184,160,0.15); color:#66735e; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(168,184,160,0.3); vertical-align:middle; font-weight:700;">${p.category}</span>` : ''}
                 ${p.isRecommended ? '<i class="fa-solid fa-thumbs-up" style="color: #F59E0B; margin-left: 6px; font-size: 0.9rem;" title="優良推薦"></i>' : ''}
             </div>
             <div class="card-desc">
@@ -287,6 +286,46 @@ document.addEventListener('DOMContentLoaded', () => {
         // Card events
         div.addEventListener('dragstart', handleDragStart);
         div.addEventListener('dragend', handleDragEnd);
+
+        // Sequence Change Logic
+        div.querySelector('.seq-input').addEventListener('change', (e) => {
+            const newSeq = parseInt(e.target.value);
+            if (isNaN(newSeq) || newSeq < 1) {
+                e.target.value = seq;
+                return;
+            }
+            if (newSeq === seq) return;
+            
+            pushHistory();
+            
+            const sessionItems = presentations.filter(x => x.session === p.session);
+            
+            const currentIndex = sessionItems.findIndex(x => x.id === p.id);
+            if (currentIndex > -1) {
+                sessionItems.splice(currentIndex, 1);
+            }
+            
+            let insertIndex = newSeq - 1;
+            if (insertIndex > sessionItems.length) insertIndex = sessionItems.length;
+            
+            sessionItems.splice(insertIndex, 0, p);
+            
+            const s1 = p.session === 1 ? sessionItems : presentations.filter(x => x.session === 1);
+            const s2 = p.session === 2 ? sessionItems : presentations.filter(x => x.session === 2);
+            const s3 = p.session === 3 ? sessionItems : presentations.filter(x => x.session === 3);
+            const s4 = p.session === 4 ? sessionItems : presentations.filter(x => x.session === 4);
+            const s0 = p.session === 0 ? sessionItems : presentations.filter(x => x.session === 0);
+            
+            presentations = [...s1, ...s2, ...s3, ...s4, ...s0];
+            
+            savePresentations(presentations);
+            renderBoard();
+        });
+        
+        // Prevent drag on input
+        div.querySelector('.seq-input').addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+        });
 
         // Edit button click -> Open Modal
         div.querySelector('.edit-btn').addEventListener('click', (e) => {
@@ -316,17 +355,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const col = document.querySelector(`.kanban-column[data-session="${session}"]`);
             if (col) {
                 const count = col.querySelectorAll('.presentation-card').length;
-                col.querySelector('.count-badge').innerText = count;
+                col.querySelector('.count-badge').innerText = count + ' 組';
             }
         });
     }
 
     function updateStats() {
+        let studentCount = 0;
+        presentations.forEach(p => {
+            const parts = p.presenters.split(',');
+            parts.forEach(part => {
+                if (part.trim()) studentCount++;
+            });
+        });
+
         const total = presentations.length;
         const completed = presentations.filter(p => p.status === 'completed').length;
         const delayed = presentations.filter(p => p.status === 'delayed' || p.session === 0).length;
         const pending = total - completed - delayed;
 
+        if (statStudents) statStudents.textContent = studentCount;
         statTotal.textContent = total;
         statCompleted.textContent = completed;
         statPending.textContent = pending;
@@ -612,7 +660,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cards.forEach(card => {
                         const cardId = card.dataset.id;
                         const cardData = presentations.find(x => x.id === cardId);
-                        if (cardData) {
+                        if (cardData && !newPresentationsOrder.includes(cardData)) {
                             newPresentationsOrder.push(cardData);
                         }
                     });
@@ -745,32 +793,26 @@ document.addEventListener('DOMContentLoaded', () => {
         XLSX.writeFile(wb, "自主學習發表排程與評語紀錄.xlsx");
     });
 
-    // --- CSV Import Logic ---
-    btnImportCsv.addEventListener('click', () => {
-        csvFileInput.click();
-    });
-
-    csvFileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            const text = evt.target.result;
-            const parsed = parseUploadedCSV(text);
-            if (parsed && parsed.length > 0) {
-                if (confirm(`成功解析出 ${parsed.length} 組報告！\n按下「確定」：系統會自動更新學生的主題與分類，並保留您已經排好的節次、狀態、評語與推薦紀錄！`)) {
-                    pushHistory();
-                    
+    // --- Auto Fetch CSV Logic ---
+    function fetchAndProcessCSV() {
+        fetch('114-2-G10自主學習發表.csv')
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.text();
+            })
+            .then(text => {
+                const parsed = parseUploadedCSV(text);
+                if (parsed && parsed.length > 0) {
+                    const usedExistingIds = new Set();
                     const merged = parsed.map(newP => {
-                        // 嘗試尋找相同的學生組合 (更強健的比對方式：用第一位學生的名字)
                         let firstStudent = '';
                         const match = newP.presenters.match(/\]\s*([^\(,\s]+)/);
                         if (match) firstStudent = match[1];
 
-                        const existingP = presentations.find(oldP => oldP.presenters.includes(firstStudent));
+                        const existingP = presentations.find(oldP => oldP.presenters.includes(firstStudent) && !usedExistingIds.has(oldP.id));
                         
                         if (existingP) {
+                            usedExistingIds.add(existingP.id);
                             let keptSession = existingP.session;
                             
                             // 強制 A 組特定名單學生回到第 2 節
@@ -782,7 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                             return { 
                                 ...newP, 
-                                id: existingP.id, // Keep old ID
+                                id: existingP.id, 
                                 session: keptSession, 
                                 status: existingP.status, 
                                 comment: existingP.comment, 
@@ -792,17 +834,31 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                         return newP;
                     });
+                    // Deduplicate merged array just in case
+                    const uniqueMerged = [];
+                    const seenSignatures = new Set();
+                    merged.forEach(p => {
+                        const sig = `${p.topic}_${p.presenters}`;
+                        if (!seenSignatures.has(sig)) {
+                            seenSignatures.add(sig);
+                            uniqueMerged.push(p);
+                        }
+                    });
                     
-                    presentations = merged;
+                    presentations = uniqueMerged;
                     savePresentations(presentations);
                     renderBoard();
-                    alert('資料匯入與更新成功！');
+                    console.log('自動匯入 CSV 資料成功！已過濾重複項目。');
                 }
-            }
-        };
-        reader.readAsText(file, 'utf-8');
-        csvFileInput.value = ''; // Reset
-    });
+            })
+            .catch(err => {
+                console.error('Failed to auto-fetch CSV:', err);
+            });
+    }
+
+    // Call it immediately on load
+    fetchAndProcessCSV();
+
 
     function parseUploadedCSV(text) {
         const lines = text.split(/\r?\n/);
@@ -905,10 +961,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const category = item.category;
             if (!category) return null;
-            if (category.includes('大眾傳播') || category.includes('外語') || category.includes('文史哲') || category.includes('法政')) return 1;
-            if (category.includes('A組') || category.includes('醫藥') || category.includes('數理') || category.includes('學科深化') || category.includes('課業深化') || category.includes('藝術與設計') || category.includes('藝術與表演')) return 2;
-            if (category.includes('家政') || category.includes('體育') || category.includes('休閒')) return 3;
-            if (category.includes('財經') || category.includes('商管') || category.includes('資訊')) return 4;
+            if (category.includes('大眾傳播') || category.includes('外語') || category.includes('檢定') || category.includes('文史哲') || category.includes('法政')) return 1;
+            if (category.includes('A組') || category.includes('醫藥') || category.includes('生科') || category.includes('數理') || category.includes('化學') || category.includes('藝術')) return 2;
+            if (category.includes('體育') || category.includes('休閒') || category.includes('財經') || category.includes('商管')) return 3;
+            if (category.includes('資訊') || category.includes('工程') || category.includes('課業深化') || category.includes('學科深化') || category.includes('學科精進')) return 4;
             return null;
         };
 
@@ -1004,58 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Reassign Sessions Logic ---
-    const btnReassignSessions = document.getElementById('btn-reassign-sessions');
-    if (btnReassignSessions) {
-        btnReassignSessions.addEventListener('click', () => {
-            if (confirm('確定要根據最新的「學群分類」自動重新分配所有場次嗎？\n未指定的學群將會平均分配到最少人的節次，且此操作會覆蓋您目前手動拖曳的場次！')) {
-                pushHistory();
-                
-                const getCategorySession = (item) => {
-                    const specialStudents = ['張廷愷', '陳宜宏', '楊明叡', '江安妤', '吳育宣', '陳子甯', '王宇珩', '吉諺揚', '邱植安', '柳兆剛', '范騰云', '郭聿安', '謝詠煜', '謝雨萱'];
-                    if (item.presenters.some(pr => specialStudents.some(s => pr.includes(s)))) return 2;
 
-                    const category = item.category;
-                    if (!category) return null;
-                    if (category.includes('大眾傳播') || category.includes('外語') || category.includes('文史哲') || category.includes('法政')) return 1;
-                    if (category.includes('A組') || category.includes('醫藥') || category.includes('數理') || category.includes('學科深化') || category.includes('課業深化') || category.includes('藝術與設計') || category.includes('藝術與表演')) return 2;
-                    if (category.includes('家政') || category.includes('體育') || category.includes('休閒')) return 3;
-                    if (category.includes('財經') || category.includes('商管') || category.includes('資訊')) return 4;
-                    return null;
-                };
-
-                const sessionCounts = {1: 0, 2: 0, 3: 0, 4: 0};
-                
-                // First pass: assign fixed sessions
-                presentations.forEach(item => {
-                    item.targetSession = getCategorySession(item);
-                    if (item.targetSession) {
-                        sessionCounts[item.targetSession]++;
-                    }
-                });
-
-                // Second pass: dynamically assign remaining to least populated session
-                presentations.forEach(item => {
-                    if (!item.targetSession) {
-                        let minSession = 1;
-                        for (let s = 2; s <= 4; s++) {
-                            if (sessionCounts[s] < sessionCounts[minSession]) {
-                                minSession = s;
-                            }
-                        }
-                        item.targetSession = minSession;
-                        sessionCounts[minSession]++;
-                    }
-                    item.session = item.targetSession; // Apply it
-                    delete item.targetSession;
-                });
-
-                savePresentations(presentations);
-                renderBoard();
-                alert('所有報告已成功依據學群重新分配場次！');
-            }
-        });
-    }
 
     // --- Publish Logic ---
     const btnPublish = document.getElementById('btn-publish');

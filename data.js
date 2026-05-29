@@ -560,6 +560,21 @@ function getPresentations() {
           updated = true;
       }
     });
+
+    // 強制去重複 (Deduplication) 確保不會有 117 個異常複製的卡片
+    const uniqueParsed = [];
+    const seenSignatures = new Set();
+    parsed.forEach(p => {
+        const sig = `${p.topic}_${p.presenters}`;
+        if (!seenSignatures.has(sig)) {
+            seenSignatures.add(sig);
+            uniqueParsed.push(p);
+        } else {
+            updated = true; // 有發現並清理掉重複，標記為需要更新
+        }
+    });
+    parsed = uniqueParsed;
+
     if (updated) {
       localStorage.setItem('presentations', JSON.stringify(parsed));
     }
@@ -576,7 +591,26 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const pub = localStorage.getItem('published_presentations');
-  return pub ? JSON.parse(pub) : getPresentations();
+  if (pub) {
+      let parsed = JSON.parse(pub);
+      const uniqueParsed = [];
+      const seenSignatures = new Set();
+      let updated = false;
+      parsed.forEach(p => {
+          const sig = `${p.topic}_${p.presenters}`;
+          if (!seenSignatures.has(sig)) {
+              seenSignatures.add(sig);
+              uniqueParsed.push(p);
+          } else {
+              updated = true;
+          }
+      });
+      if (updated) {
+          localStorage.setItem('published_presentations', JSON.stringify(uniqueParsed));
+      }
+      return uniqueParsed;
+  }
+  return getPresentations();
 }
 
 function getFeedbacks() {

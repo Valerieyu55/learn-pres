@@ -260,7 +260,7 @@ body {
 /* 3. 老師端儀表板 (Stats Section) */
 .teacher-dashboard {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 1.25rem;
     margin-bottom: 1rem;
     flex-shrink: 0;
