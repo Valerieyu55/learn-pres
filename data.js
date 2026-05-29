@@ -541,10 +541,11 @@ function getPresentations() {
           
           const mockP = mockPresentations.find(m => m.presenters.includes(studentName));
           if (mockP) {
-            if (p.topic !== mockP.topic || p.category !== mockP.category || p.presenters !== mockP.presenters) {
+            if (p.topic !== mockP.topic || p.category !== mockP.category || p.presenters !== mockP.presenters || p.session !== mockP.session) {
                p.topic = mockP.topic;
                p.category = mockP.category;
                p.presenters = mockP.presenters;
+               p.session = mockP.session;
                updated = true;
             }
           }
