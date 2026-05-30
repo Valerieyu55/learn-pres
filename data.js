@@ -526,7 +526,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category })));
+  const currentMockHash = "v2_" + JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category, s: m.session })));
 
   if (stored) {
     let parsed = JSON.parse(stored);
@@ -534,6 +534,7 @@ function getPresentations() {
     
     // 只有當 data.js 裡的 mockPresentations 真的是被手動修改過時，才進行同步覆蓋
     if (storedMockHash !== currentMockHash) {
+        localStorage.removeItem('published_presentations'); // 強制更新學生端
         parsed.forEach(p => {
           let studentName = '';
           const match = p.presenters.match(/\]\s*([^\(,\s]+)/);
@@ -606,6 +607,15 @@ function savePresentations(data) {
 }
 
 function getPublishedPresentations() {
+  const storedMockHash = localStorage.getItem('mockPresentationsHash');
+  const currentMockHash = "v2_" + JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category, s: m.session })));
+
+  // 若版本有更新，放棄舊版的 published_presentations，強制拿最新的
+  if (storedMockHash !== currentMockHash) {
+      localStorage.removeItem('published_presentations');
+      return getPresentations();
+  }
+
   const pub = localStorage.getItem('published_presentations');
   if (pub) {
       let parsed = JSON.parse(pub);
