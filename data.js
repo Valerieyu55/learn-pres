@@ -21,7 +21,7 @@ const mockPresentations = [
     "id": "p_1780042813531_3",
     "topic": "分析NBA隊伍擴建",
     "presenters": "[1001] 王舜傑 (2), [1001] 李晧瑋 (6)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -48,7 +48,7 @@ const mockPresentations = [
     "id": "p_1780042813531_6",
     "topic": "自學Bach Partita No.3",
     "presenters": "[1002] 王湧碩 (3)",
-    "session": 1,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -75,7 +75,7 @@ const mockPresentations = [
     "id": "p_1780042813531_9",
     "topic": "十字翻轉棋",
     "presenters": "[1001] 李建頡 (5), [1001] 張依璇 (34)",
-    "session": 2,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -84,7 +84,7 @@ const mockPresentations = [
     "id": "p_1780042813531_10",
     "topic": "消費心理學",
     "presenters": "[1002] 朱立恩 (5)",
-    "session": 4,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -102,7 +102,7 @@ const mockPresentations = [
     "id": "p_1780042813531_12",
     "topic": "AREE(台灣學術倫理教育研究中心)修課",
     "presenters": "[1002] 江瑋宸 (6)",
-    "session": 2,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -111,7 +111,7 @@ const mockPresentations = [
     "id": "p_1780042813531_13",
     "topic": "投資理財相關研究",
     "presenters": "[1001] 陳昱安 (9), [1001] 傅天禹 (15)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -183,7 +183,7 @@ const mockPresentations = [
     "id": "p_1780042813531_21",
     "topic": "鐵人三項",
     "presenters": "[1001] 陳丹 (13)",
-    "session": 3,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -219,7 +219,7 @@ const mockPresentations = [
     "id": "p_1780042813531_25",
     "topic": "最低薪資調漲會怎麼影響失業率",
     "presenters": "[1001] 蕭昂森 (18), [1001] 江昀潔 (27)",
-    "session": 4,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -237,7 +237,7 @@ const mockPresentations = [
     "id": "p_1780042813531_27",
     "topic": "俄文學習",
     "presenters": "[1001] 蘇雋博 (20)",
-    "session": 1,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -273,7 +273,7 @@ const mockPresentations = [
     "id": "p_1780042813531_31",
     "topic": "解剖學",
     "presenters": "[1001] 林詠潔 (31), [1001] 楊佑澧 (42)",
-    "session": 2,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -282,7 +282,7 @@ const mockPresentations = [
     "id": "p_1780042813531_32",
     "topic": "游泳技巧",
     "presenters": "[1002] 潘奕廷 (19)",
-    "session": 3,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -309,7 +309,7 @@ const mockPresentations = [
     "id": "p_1780042813531_35",
     "topic": "不同運動強度下賽前營養補充之影響",
     "presenters": "[1001] 張丞妘 (33)",
-    "session": 3,
+    "session": 4,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -318,7 +318,7 @@ const mockPresentations = [
     "id": "p_1780042813531_36",
     "topic": "琴、音樂與我的自我救贖",
     "presenters": "[1002] 涂維凱 (22)",
-    "session": 1,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -354,7 +354,7 @@ const mockPresentations = [
     "id": "p_1780042813531_40",
     "topic": "中國笛-合奏進行中",
     "presenters": "[1002] 林于安 (27), [1002] 劉晁媖 (38)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -381,7 +381,7 @@ const mockPresentations = [
     "id": "p_1780042813531_43",
     "topic": "TCK第三文化小孩之研究",
     "presenters": "[1001] 曾行 (39)",
-    "session": 3,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -435,7 +435,7 @@ const mockPresentations = [
     "id": "p_1780042813531_49",
     "topic": "自學橋牌",
     "presenters": "[1001] 龔芃朵 (45)",
-    "session": 4,
+    "session": 3,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -462,7 +462,7 @@ const mockPresentations = [
     "id": "p_1780042813531_52",
     "topic": "從MBTI熱潮看現代人的自我認同與社交心理學",
     "presenters": "[1002] 陳意喬 (35)",
-    "session": 1,
+    "session": 2,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -471,7 +471,7 @@ const mockPresentations = [
     "id": "p_1780042813531_53",
     "topic": "學習法文",
     "presenters": "[1002] 黃湜閔 (36)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -507,7 +507,7 @@ const mockPresentations = [
     "id": "p_1780042813531_57",
     "topic": "學習西班牙文",
     "presenters": "[1002] 賴禹潔 (42)",
-    "session": 3,
+    "session": 1,
     "status": "pending",
     "comment": "",
     "category": "未分類"
@@ -526,7 +526,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v3_" + JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category, s: m.session })));
+  const currentMockHash = "v2_" + JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category, s: m.session })));
 
   if (stored) {
     let parsed = JSON.parse(stored);
@@ -608,7 +608,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v3_" + JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category, s: m.session })));
+  const currentMockHash = "v2_" + JSON.stringify(mockPresentations.map(m => ({ p: m.presenters, t: m.topic, c: m.category, s: m.session })));
 
   // 若版本有更新，放棄舊版的 published_presentations，強制拿最新的
   if (storedMockHash !== currentMockHash) {
