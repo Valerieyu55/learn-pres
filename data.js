@@ -441,6 +441,15 @@ const mockPresentations = [
     "category": "未分類"
   },
   {
+    "id": "p_7mll8bpqg",
+    "topic": "投資理財",
+    "presenters": "[1001] 江雋凱(3),林宏銘(7),潘奕劭(17)",
+    "session": 4,
+    "status": "pending",
+    "comment": "",
+    "category": "未分類"
+  },
+  {
     "id": "p_20",
     "topic": "資幾資比⽅能百戰百勝",
     "presenters": "[1001] 陳芊羽 (38)",
@@ -517,7 +526,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v4";
+  const currentMockHash = "v5";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('presentations');
@@ -541,7 +550,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v4";
+  const currentMockHash = "v5";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
