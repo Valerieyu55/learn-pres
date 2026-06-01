@@ -526,7 +526,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v12";
+  const currentMockHash = "v13";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('presentations');
@@ -550,7 +550,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v12";
+  const currentMockHash = "v13";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
@@ -596,6 +596,22 @@ function saveFeedback(feedback) {
   const feedbacks = getFeedbacks();
   feedbacks.push(feedback);
   localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+  
+  if (typeof GAS_URL !== 'undefined') {
+      fetch(GAS_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+              action: 'submit',
+              id: feedback.id,
+              studentName: feedback.studentName,
+              session: feedback.session,
+              topic: feedback.topic,
+              content: feedback.content,
+              timestamp: feedback.timestamp
+          }),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      }).catch(console.error);
+  }
 }
 
 function saveFeedbacks(data) {
