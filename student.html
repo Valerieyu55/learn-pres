@@ -572,7 +572,7 @@
         </div> <!-- End of feedback-view -->
     </div>
 
-    <script src="data.js?v=10"></script>
+    <script src="data.js?v=11"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let presentations = getPublishedPresentations();
@@ -791,8 +791,8 @@
                 
                 let inputNameClean = studentName.replace(/^\d{4}\s*/, '').trim();
                 
-
                 const finalStudentName = `${studentClass} ${inputNameClean}`;
+                localStorage.setItem('myStudentName', inputNameClean);
 
                 const session = sessionSelect.value;
                 const topic = topicSelect.value;
@@ -851,8 +851,7 @@
                         if (namePart) validNames.push(namePart);
                     });
                 });
-
-                let myName = localStorage.getItem('myStudentName') || '';
+                let myName = localStorage.getItem('myStudentName') || document.getElementById('student-name').value.replace(/^\d{4}\s*/, '').trim() || '';
 
                 activeFeedbacks.forEach(fb => {
                     if (!fb.likedBy) fb.likedBy = [];
