@@ -1312,9 +1312,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Auto reload state every 5 seconds to sync with student submissions
     setInterval(() => {
-        const currentLength = feedbacks.length;
+        const oldFbStr = JSON.stringify(feedbacks);
         feedbacks = getFeedbacks();
-        if (feedbacks.length !== currentLength) {
+        if (JSON.stringify(feedbacks) !== oldFbStr) {
             renderTeacherFeedbacks();
             renderSubmissionStatus();
         }
