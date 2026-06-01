@@ -604,7 +604,7 @@ function saveFeedbacks(data) {
 
 
 // --- Remote Sync Logic for Google Apps Script ---
-const GAS_URL = 'https://script.google.com/a/macros/kcislk.ntpc.edu.tw/s/AKfycbzZt5eYxerXa5XWSOzZLe1TAPAPQrWxSFSVXAkHcSkO-FY5JNcsLlgJ9_4t5-FzRvq9/exec';
+const GAS_URL = 'https://script.google.com/a/macros/kcislk.ntpc.edu.tw/s/AKfycbxn_X28M4b9zxADCiLWhihSXFUG7vT-YYnVnVQwlMzqKFndl_aE73dkLejOj6D5BQsQ/exec';
 
 let isFetching = false;
 function fetchFeedbacksRemote() {
