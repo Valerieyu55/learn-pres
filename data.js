@@ -441,7 +441,7 @@ const mockPresentations = [
     "category": "未分類"
   },
   {
-    "id": "p_7mll8bpqg",
+    "id": "p_spsg9cwms",
     "topic": "投資理財",
     "presenters": "[1001] 江雋凱(3),林宏銘(7),潘奕劭(17)",
     "session": 4,
@@ -526,7 +526,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v5";
+  const currentMockHash = "v10";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('presentations');
@@ -550,7 +550,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v5";
+  const currentMockHash = "v10";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
@@ -604,7 +604,7 @@ function saveFeedbacks(data) {
 
 
 // --- Remote Sync Logic for Google Apps Script ---
-const GAS_URL = 'https://script.google.com/a/macros/kcislk.ntpc.edu.tw/s/AKfycbxn_X28M4b9zxADCiLWhihSXFUG7vT-YYnVnVQwlMzqKFndl_aE73dkLejOj6D5BQsQ/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyQzb9kHzgfWXf_klcZKR8d-WzjqiGX2P3UZaZDqtf1IusQ1TWb0T2PMYAsCkN1QpY/exec';
 
 let isFetching = false;
 function fetchFeedbacksRemote() {
