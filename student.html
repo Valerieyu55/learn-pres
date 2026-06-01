@@ -572,7 +572,7 @@
         </div> <!-- End of feedback-view -->
     </div>
 
-    <script src="data.js?v=5"></script>
+    <script src="data.js?v=6"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let presentations = getPublishedPresentations();
@@ -917,6 +917,9 @@
                                 saveFeedbacks(feedbacks);
                             } else {
                                 localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+                            }
+                            if (typeof likeFeedbackRemote === 'function') {
+                                likeFeedbackRemote(fb.id, currentName);
                             }
                             renderFeedbacks();
                         }

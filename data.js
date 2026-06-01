@@ -601,3 +601,49 @@ function saveFeedback(feedback) {
 function saveFeedbacks(data) {
   localStorage.setItem('feedbacks', JSON.stringify(data));
 }
+
+
+// --- Remote Sync Logic for Google Apps Script ---
+const GAS_URL = 'https://script.google.com/a/macros/kcislk.ntpc.edu.tw/s/AKfycbzZt5eYxerXa5XWSOzZLe1TAPAPQrWxSFSVXAkHcSkO-FY5JNcsLlgJ9_4t5-FzRvq9/exec';
+
+let isFetching = false;
+function fetchFeedbacksRemote() {
+    if (isFetching) return;
+    isFetching = true;
+    fetch(GAS_URL)
+        .then(res => res.json())
+        .then(data => {
+            if (Array.isArray(data)) {
+                localStorage.setItem('feedbacks', JSON.stringify(data));
+            }
+            isFetching = false;
+        })
+        .catch(err => {
+            console.error("Sync error:", err);
+            isFetching = false;
+        });
+}
+
+// override saveFeedback to also post
+const originalSaveFeedback = saveFeedback;
+saveFeedback = function(feedback) {
+    originalSaveFeedback(feedback);
+    fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'submit', ...feedback }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    }).catch(console.error);
+};
+
+function likeFeedbackRemote(id, studentName) {
+    fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'like', id: id, studentName: studentName }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    }).catch(console.error);
+}
+
+// Start polling remote API every 5 seconds to keep feedbacks in sync
+setInterval(fetchFeedbacksRemote, 5000);
+// Initial fetch
+setTimeout(fetchFeedbacksRemote, 500);
