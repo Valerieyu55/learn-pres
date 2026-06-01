@@ -563,13 +563,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalSaveNextBtn) {
         modalSaveNextBtn.addEventListener('click', () => {
             if (saveCurrentEditing()) {
+                const currentPres = presentations.find(p => p.id === currentEditingId);
+                if (!currentPres) return;
+                
+                // Filter to only include presentations from the SAME session
+                const sessionPres = presentations.filter(p => p.session === currentPres.session && p.status !== 'delayed');
+                
                 // Find next
-                let found = false;
                 let nextId = null;
-                for (let i = 0; i < presentations.length; i++) {
-                    if (presentations[i].id === currentEditingId) {
-                        if (i + 1 < presentations.length) {
-                            nextId = presentations[i + 1].id;
+                for (let i = 0; i < sessionPres.length; i++) {
+                    if (sessionPres[i].id === currentEditingId) {
+                        if (i + 1 < sessionPres.length) {
+                            nextId = sessionPres[i + 1].id;
                         }
                         break;
                     }
@@ -578,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (nextId) {
                     openEditModal(nextId);
                 } else {
-                    alert('已經是最後一組了！');
+                    alert('已經是本堂課的最後一組了！');
                     closeEditModal();
                 }
             }
