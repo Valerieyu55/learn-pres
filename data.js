@@ -643,6 +643,14 @@ function likeFeedbackRemote(id, studentName) {
     }).catch(console.error);
 }
 
+function deleteFeedbackRemote(id) {
+    fetch(GAS_URL, {
+        method: 'POST',
+        body: JSON.stringify({ action: 'delete', id: id }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+    }).catch(console.error);
+}
+
 // Start polling remote API every 5 seconds to keep feedbacks in sync
 setInterval(fetchFeedbacksRemote, 5000);
 // Initial fetch

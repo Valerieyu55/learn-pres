@@ -572,7 +572,7 @@
         </div> <!-- End of feedback-view -->
     </div>
 
-    <script src="data.js?v=7"></script>
+    <script src="data.js?v=9"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let presentations = getPublishedPresentations();
@@ -791,10 +791,6 @@
                 
                 let inputNameClean = studentName.replace(/^\d{4}\s*/, '').trim();
                 
-                if (!validNames.includes(inputNameClean)) {
-                    alert('很抱歉，您的名字不在學生名冊中，無法提交留言。');
-                    return;
-                }
 
                 const finalStudentName = `${studentClass} ${inputNameClean}`;
 
@@ -875,9 +871,12 @@
                         <div class="feedback-target">🎯 聆聽主題：${fb.topic}</div>
                         <div class="feedback-text">「${fb.content}」</div>
                         <div style="display: flex; flex-direction: column; align-items: flex-end; margin-top: 8px;">
-                            <button class="like-btn" data-id="${fb.id}" style="background: none; border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: ${hasLiked ? '#EF4444' : 'var(--primary)'}; transition: all 0.2s;">
-                                <i class="fa-${hasLiked ? 'solid' : 'regular'} fa-heart" style="${hasLiked ? 'color: #EF4444;' : ''}"></i> 讚 (${fb.likedBy.length})
-                            </button>
+                            <div style="display: flex; gap: 8px;">
+                                ${myName && fb.studentName.includes(myName) ? `<button class="delete-btn" data-id="${fb.id}" style="background: none; border: 1px solid #EF4444; padding: 4px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: #EF4444; transition: all 0.2s;"><i class="fa-solid fa-trash"></i> 刪除</button>` : ''}
+                                <button class="like-btn" data-id="${fb.id}" style="background: none; border: 1px solid var(--border); padding: 4px 8px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 4px; color: ${hasLiked ? '#EF4444' : 'var(--primary)'}; transition: all 0.2s;">
+                                    <i class="fa-${hasLiked ? 'solid' : 'regular'} fa-heart" style="${hasLiked ? 'color: #EF4444;' : ''}"></i> 讚 (${fb.likedBy.length})
+                                </button>
+                            </div>
                             ${likedByStr}
                         </div>
                     `;
@@ -893,11 +892,7 @@
                                 return;
                             }
                             input = input.replace(/^\d{4}\s*/, '');
-                            if (!validNames.includes(input)) {
-                                alert('很抱歉，您的名字不在學生名冊中，無法按讚。請確認您輸入的是正確全名。');
-                                document.getElementById('student-name').focus();
-                                return;
-                            }
+
                             currentName = input;
                             localStorage.setItem('myStudentName', currentName);
                         }
@@ -924,6 +919,25 @@
                             renderFeedbacks();
                         }
                     });
+
+                    const deleteBtn = div.querySelector('.delete-btn');
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', () => {
+                            if (confirm('確定要刪除這筆回饋嗎？')) {
+                                feedbacks = feedbacks.filter(f => f.id !== fb.id);
+                                if (typeof saveFeedbacks === 'function') {
+                                    saveFeedbacks(feedbacks);
+                                } else {
+                                    localStorage.setItem('feedbacks', JSON.stringify(feedbacks));
+                                }
+                                if (typeof deleteFeedbackRemote === 'function') {
+                                    deleteFeedbackRemote(fb.id);
+                                }
+                                renderFeedbacks();
+                            }
+                        });
+                    }
+
                     grid.appendChild(div);
                 });
             }
