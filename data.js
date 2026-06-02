@@ -458,15 +458,7 @@ const mockPresentations = [
     "comment": "",
     "category": "未分類"
   },
-  {
-    "id": "p_47",
-    "topic": "財經金融管理",
-    "presenters": "[1002] 邱歆宸 (29)",
-    "session": 4,
-    "status": "pending",
-    "comment": "",
-    "category": "未分類"
-  },
+
   {
     "id": "p_38",
     "topic": "投資理財學",
@@ -520,13 +512,22 @@ const mockPresentations = [
     "status": "pending",
     "comment": "",
     "category": "未分類"
+  },
+  {
+    "id": "p_47",
+    "topic": "財經金融管理",
+    "presenters": "[1002] 邱歆宸 (29)",
+    "session": 0,
+    "status": "pending",
+    "comment": "",
+    "category": "未分類"
   }
 ];
 
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v17";
+  const currentMockHash = "v18";
 
   if (storedMockHash !== currentMockHash) {
       let oldPres = [];
@@ -568,7 +569,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v17";
+  const currentMockHash = "v18";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
