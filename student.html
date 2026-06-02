@@ -513,6 +513,7 @@
                             <label for="student-class">班級</label>
                             <select id="student-class" required>
                                 <option value="">選擇班級...</option>
+                                <option value="老師">老師</option>
                                 <option value="1001">1001班</option>
                                 <option value="1002">1002班</option>
                             </select>
@@ -572,7 +573,7 @@
         </div> <!-- End of feedback-view -->
     </div>
 
-    <script src="data.js?v=13"></script>
+    <script src="data.js?v=15"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             let presentations = getPublishedPresentations();

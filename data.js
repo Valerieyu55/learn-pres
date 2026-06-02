@@ -526,7 +526,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v13";
+  const currentMockHash = "v15";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('presentations');
@@ -550,7 +550,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v13";
+  const currentMockHash = "v15";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');

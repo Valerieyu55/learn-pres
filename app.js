@@ -1264,7 +1264,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     return;
                 }
                 const topic = fb.topic;
-                topicCounts[topic] = (topicCounts[topic] || 0) + 1;
+                // Count = 1 (author) + number of likes
+                const count = 1 + (fb.likedBy ? fb.likedBy.length : 0);
+                topicCounts[topic] = (topicCounts[topic] || 0) + count;
             });
 
             const sortedTopics = Object.entries(topicCounts)
@@ -1272,42 +1274,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 .sort((a, b) => b.count - a.count);
 
             mvpBoard.innerHTML = '';
-            if (sortedTopics.length === 0) {
-                mvpBoard.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted); padding: 1rem 0;">目前無回饋資料可供排名。</span>';
-            } else {
-                const top3 = sortedTopics.slice(0, 3);
-                const podiumOrder = [];
-                // Arrange in podium order: 2, 1, 3
-                if (top3[1]) podiumOrder.push({ ...top3[1], rank: 2, height: '110px', color: '#B3B3B3', bg: '#F5F5F5' });
-                if (top3[0]) podiumOrder.push({ ...top3[0], rank: 1, height: '140px', color: '#D4AF37', bg: '#FFFDF5' });
-                if (top3[2]) podiumOrder.push({ ...top3[2], rank: 3, height: '90px', color: '#CD7F32', bg: '#FAF5E8' });
+            
+            // Adjust container for a vertical list
+            mvpBoard.style.flexDirection = 'column';
+            mvpBoard.style.alignItems = 'stretch';
+            mvpBoard.style.gap = '8px';
+            mvpBoard.style.justifyContent = 'flex-start';
+            mvpBoard.style.maxHeight = '400px';
+            mvpBoard.style.overflowY = 'auto';
+            mvpBoard.style.paddingRight = '8px';
 
-                podiumOrder.forEach(item => {
+            if (sortedTopics.length === 0) {
+                mvpBoard.innerHTML = '<span style="font-size:0.85rem; color:var(--text-muted); padding: 1rem 0; text-align: center;">目前無回饋資料可供排名。</span>';
+            } else {
+                const top10 = sortedTopics.slice(0, 10);
+                
+                top10.forEach((item, index) => {
+                    const rank = index + 1;
                     const card = document.createElement('div');
+                    let bg = '#F9FAFB';
+                    let border = '1px solid var(--border)';
+                    let rankIcon = rank;
+                    
+                    if (rank === 1) { bg = '#FFFDF5'; border = '2px solid #D4AF37'; rankIcon = '🥇'; }
+                    else if (rank === 2) { bg = '#F5F5F5'; border = '2px solid #B3B3B3'; rankIcon = '🥈'; }
+                    else if (rank === 3) { bg = '#FAF5E8'; border = '2px solid #CD7F32'; rankIcon = '🥉'; }
+                    
                     card.style.cssText = `
                         display: flex;
-                        flex-direction: column;
                         align-items: center;
-                        justify-content: flex-end;
-                        width: 30%;
-                        max-width: 200px;
-                        height: ${item.height};
-                        background: ${item.bg};
-                        border: 1px solid ${item.color};
-                        border-bottom: 4px solid ${item.color};
-                        border-radius: 8px 8px 0 0;
-                        padding: 1rem 0.75rem;
-                        text-align: center;
-                        position: relative;
-                        box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
+                        background: ${bg};
+                        border: ${border};
+                        border-radius: 8px;
+                        padding: 10px 16px;
+                        gap: 16px;
+                        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
                     `;
                     
-                    const rankIcon = item.rank === 1 ? '🥇' : item.rank === 2 ? '🥈' : '🥉';
-                    
                     card.innerHTML = `
-                        <div style="position: absolute; top: -20px; font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">${rankIcon}</div>
-                        <div style="font-size: 0.8rem; font-weight: bold; color: var(--primary); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;" title="${item.topic}">${item.topic}</div>
-                        <div style="font-size: 0.95rem; font-weight: bold; color: ${item.color}; background: white; padding: 2px 10px; border-radius: 12px; border: 1px solid ${item.color}; margin-top: auto;">${item.count} 票</div>
+                        <div style="font-size: 1.5rem; font-weight: bold; color: var(--primary); width: 30px; text-align: center;">${rankIcon}</div>
+                        <div style="flex-grow: 1; font-size: 0.95rem; font-weight: bold; color: var(--text-dark);">${item.topic}</div>
+                        <div style="font-size: 1rem; font-weight: bold; color: var(--primary); background: white; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border);">${item.count} 人</div>
                     `;
                     mvpBoard.appendChild(card);
                 });
