@@ -729,13 +729,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const likedByArray = fb.likedBy || [];
             const likedByStr = likedByArray.length > 0 ? `<div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; text-align: right;">${likedByArray.join(', ')} 覺得讚</div>` : '';
             
+            let displayTime = fb.timestamp;
+            if (displayTime && displayTime.includes('T') && displayTime.endsWith('Z')) {
+                const dateObj = new Date(displayTime);
+                if (!isNaN(dateObj.getTime())) {
+                    displayTime = dateObj.toLocaleString('zh-TW', { hour12: false });
+                }
+            }
+            
             const div = document.createElement('div');
             div.className = 'feedback-item';
             div.innerHTML = `
                 <div class="feedback-item-header" style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <span class="feedback-student-tag"><i class="fa-solid fa-user"></i> ${fb.studentName}</span>
-                        <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">${fb.timestamp}</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 8px;">${displayTime}</span>
                     </div>
                     <button class="delete-fb-btn" data-id="${fb.id}" style="background:none; border:none; color: var(--danger); cursor:pointer; padding: 4px; border-radius: 4px;" title="刪除回饋"><i class="fa-solid fa-trash"></i></button>
                 </div>

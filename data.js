@@ -526,14 +526,32 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v15";
+  const currentMockHash = "v16";
 
   if (storedMockHash !== currentMockHash) {
-      localStorage.removeItem('presentations');
-      localStorage.removeItem('published_presentations');
+      let oldPres = [];
+      if (stored) {
+          try { oldPres = JSON.parse(stored); } catch(e) {}
+      }
+      
+      // Merge teacher's edits (status, score, comment, timeSpent) into the new mock data
+      const merged = mockPresentations.map(newP => {
+          const oldP = oldPres.find(p => p.id === newP.id);
+          if (oldP && (oldP.status !== 'unfilled' || oldP.score || oldP.comment || oldP.timeSpent)) {
+              return {
+                  ...newP,
+                  status: oldP.status || newP.status,
+                  score: oldP.score || newP.score,
+                  comment: oldP.comment || newP.comment,
+                  timeSpent: oldP.timeSpent || newP.timeSpent
+              };
+          }
+          return newP;
+      });
+
       localStorage.setItem('mockPresentationsHash', currentMockHash);
-      localStorage.setItem('presentations', JSON.stringify(mockPresentations));
-      return mockPresentations;
+      localStorage.setItem('presentations', JSON.stringify(merged));
+      return merged;
   }
 
   if (stored) {
@@ -550,7 +568,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v15";
+  const currentMockHash = "v16";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
