@@ -759,10 +759,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (delBtn) {
                 delBtn.addEventListener('click', (e) => {
                     if (confirm('確定要刪除這筆回饋嗎？')) {
+                        // Optimistically remove all local copies (if duplicates have the same ID)
                         feedbacks = feedbacks.filter(f => f.id !== fb.id);
                         saveFeedbacks(feedbacks);
+                        if (typeof deleteFeedbackRemote === 'function') {
+                            deleteFeedbackRemote(fb.id);
+                        }
                         renderTeacherFeedbacks();
-                        updateSubmissionStats();
+                        if (typeof updateSubmissionStats === 'function') {
+                            updateSubmissionStats();
+                        }
                     }
                 });
             }
