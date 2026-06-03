@@ -80,15 +80,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnToggleLock.style.color = 'var(--danger)';
                 btnToggleLock.style.borderColor = 'var(--danger)';
                 if (btnInterleave) btnInterleave.style.display = 'none';
+                const btnReset = document.getElementById('btn-reset-order');
+                if (btnReset) btnReset.style.display = 'none';
             } else {
                 btnToggleLock.innerHTML = '<i class="fa-solid fa-lock-open"></i> 排程已解鎖';
                 btnToggleLock.style.color = '#10B981'; // green
                 btnToggleLock.style.borderColor = '#10B981';
                 if (btnInterleave) btnInterleave.style.display = 'inline-block';
+                const btnReset = document.getElementById('btn-reset-order');
+                if (btnReset) btnReset.style.display = 'inline-block';
             }
             
             // Re-render board to update draggable and input disabled states
             renderBoard();
+        });
+    }
+
+    const btnResetOrder = document.getElementById('btn-reset-order');
+    if (btnResetOrder) {
+        btnResetOrder.addEventListener('click', () => {
+            if (confirm('確定要還原為原始 Excel 預設排程順序嗎？\n這將會清除您目前自訂的順序（但會保留教師評語和狀態）。')) {
+                pushHistory();
+                // We use mockPresentations to get the default order, but preserve user modifications
+                const newPres = mockPresentations.map(mockP => {
+                    const existingP = presentations.find(p => p.id === mockP.id);
+                    if (existingP) {
+                        return {
+                            ...mockP,
+                            status: existingP.status,
+                            score: existingP.score,
+                            comment: existingP.comment,
+                            timeSpent: existingP.timeSpent,
+                            isRecommended: existingP.isRecommended
+                        };
+                    }
+                    return mockP;
+                });
+                presentations = newPres;
+                savePresentations(presentations);
+                renderBoard();
+            }
         });
     }
 
