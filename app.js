@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let presentations = getPresentations();
     let feedbacks = getFeedbacks();
     let currentEditingId = null;
+    let isScheduleLocked = true;
 
     // --- History State ---
     let historyStack = [];
@@ -65,6 +66,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnRedo.style.color = '#D1D5DB';
             }
         }
+    }
+    // --- Schedule Lock Logic ---
+    const btnToggleLock = document.getElementById('btn-toggle-lock');
+    const btnInterleave = document.getElementById('btn-interleave');
+    
+    if (btnToggleLock) {
+        btnToggleLock.addEventListener('click', () => {
+            isScheduleLocked = !isScheduleLocked;
+            
+            if (isScheduleLocked) {
+                btnToggleLock.innerHTML = '<i class="fa-solid fa-lock"></i> 排程已鎖定';
+                btnToggleLock.style.color = 'var(--danger)';
+                btnToggleLock.style.borderColor = 'var(--danger)';
+                if (btnInterleave) btnInterleave.style.display = 'none';
+            } else {
+                btnToggleLock.innerHTML = '<i class="fa-solid fa-lock-open"></i> 排程已解鎖';
+                btnToggleLock.style.color = '#10B981'; // green
+                btnToggleLock.style.borderColor = '#10B981';
+                if (btnInterleave) btnInterleave.style.display = 'inline-block';
+            }
+            
+            // Re-render board to update draggable and input disabled states
+            renderBoard();
+        });
     }
 
     // --- DOM Elements ---
@@ -248,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
             div.style.boxShadow = '0 4px 6px rgba(245, 158, 11, 0.1)';
         }
         
+        div.draggable = !isScheduleLocked;
         div.dataset.id = p.id;
 
         let statusText = '⏳ 尚未報告';
@@ -261,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         div.innerHTML = `
             <div class="card-title">
-                <span class="seq-badge" style="display:inline-block; width: 22px; height: 22px; text-align: center; background-color: var(--accent); color: white; border-radius: 11px; font-size: 0.8rem; margin-right: 4px; font-weight: bold; line-height: 22px; vertical-align: middle;">${seq}</span>${displayTopic}
+                <input type="number" class="seq-input" data-id="${p.id}" value="${seq}" min="1" title="輸入數字可直接調整順序" style="width: 36px; height: 22px; text-align: center; background-color: var(--accent); color: white; border: 1px solid rgba(255,255,255,0.3); border-radius: 11px; font-size: 0.8rem; margin-right: 4px; font-weight: bold; outline: none; cursor: ${isScheduleLocked ? 'not-allowed' : 'text'}; vertical-align: middle; opacity: ${isScheduleLocked ? '0.7' : '1'};" ${isScheduleLocked ? 'disabled' : ''}>${displayTopic}
                 ${p.category && p.category !== '未分類' ? `<span style="display:inline-block; font-size:0.7rem; background:rgba(168,184,160,0.15); color:#66735e; padding:2px 6px; border-radius:4px; margin-left:6px; border:1px solid rgba(168,184,160,0.3); vertical-align:middle; font-weight:700;">${p.category}</span>` : ''}
                 ${p.isRecommended ? '<i class="fa-solid fa-thumbs-up" style="color: #F59E0B; margin-left: 6px; font-size: 0.9rem;" title="優良推薦"></i>' : ''}
             </div>
@@ -282,7 +308,53 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        // (Drag and sequence change logic removed to prevent accidental reordering)
+        // Card events
+        div.addEventListener('dragstart', handleDragStart);
+        div.addEventListener('dragend', handleDragEnd);
+
+        // Sequence Change Logic
+        div.querySelector('.seq-input').addEventListener('change', (e) => {
+            if (isScheduleLocked) {
+                e.target.value = seq;
+                return;
+            }
+            const newSeq = parseInt(e.target.value);
+            if (isNaN(newSeq) || newSeq < 1) {
+                e.target.value = seq;
+                return;
+            }
+            if (newSeq === seq) return;
+            
+            pushHistory();
+            
+            const sessionItems = presentations.filter(x => x.session === p.session);
+            
+            const currentIndex = sessionItems.findIndex(x => x.id === p.id);
+            if (currentIndex > -1) {
+                sessionItems.splice(currentIndex, 1);
+            }
+            
+            let insertIndex = newSeq - 1;
+            if (insertIndex > sessionItems.length) insertIndex = sessionItems.length;
+            
+            sessionItems.splice(insertIndex, 0, p);
+            
+            const s1 = p.session === 1 ? sessionItems : presentations.filter(x => x.session === 1);
+            const s2 = p.session === 2 ? sessionItems : presentations.filter(x => x.session === 2);
+            const s3 = p.session === 3 ? sessionItems : presentations.filter(x => x.session === 3);
+            const s4 = p.session === 4 ? sessionItems : presentations.filter(x => x.session === 4);
+            const s0 = p.session === 0 ? sessionItems : presentations.filter(x => x.session === 0);
+            
+            presentations = [...s1, ...s2, ...s3, ...s4, ...s0];
+            
+            savePresentations(presentations);
+            renderBoard();
+        });
+        
+        // Prevent drag on input
+        div.querySelector('.seq-input').addEventListener('mousedown', (e) => {
+            e.stopPropagation();
+        });
 
         // Edit button click -> Open Modal
         div.querySelector('.edit-btn').addEventListener('click', (e) => {
@@ -560,6 +632,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let draggedCard = null;
 
     function handleDragStart(e) {
+        if (isScheduleLocked) {
+            e.preventDefault();
+            return;
+        }
         draggedCard = this;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
@@ -576,6 +652,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.setAttribute('data-drop-setup', 'true');
         
         container.addEventListener('dragover', e => {
+            if (isScheduleLocked) return;
             e.preventDefault();
             const afterElement = getDragAfterElement(container, e.clientY);
             const draggable = document.querySelector('.dragging');
@@ -589,6 +666,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         container.addEventListener('drop', e => {
+            if (isScheduleLocked) return;
             e.preventDefault();
             const id = e.dataTransfer.getData('text/plain');
             const newSession = parseInt(container.closest('.kanban-column').dataset.session);
@@ -991,7 +1069,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // (Interleave Logic removed to prevent accidental schedule reordering)
+    // --- Interleave Logic ---
+    const btnInterleave = document.getElementById('btn-interleave');
+    let interleave1001First = true;
+    if (btnInterleave) {
+        btnInterleave.addEventListener('click', () => {
+            if (confirm(`確定要自動交錯排列各節次的 1001 與 1002 班級嗎？\n此操作將以「${interleave1001First ? '1001班' : '1002班'}優先」的方式重新排序，但不會改變您各班內部的先後順序。`)) {
+                pushHistory();
+                
+                function getClassStr(p) {
+                    if (p.presenters.includes('[1001]')) return '1001';
+                    if (p.presenters.includes('[1002]')) return '1002';
+                    return 'unknown';
+                }
+
+                const newOrder = [];
+                // Process each session separately
+                [1, 2, 3, 4, 0].forEach(session => {
+                    const sessionCards = presentations.filter(p => p.session === session);
+                    const class1 = sessionCards.filter(p => getClassStr(p) === '1001');
+                    const class2 = sessionCards.filter(p => getClassStr(p) === '1002');
+                    const unk = sessionCards.filter(p => getClassStr(p) === 'unknown');
+                    
+                    const firstClass = interleave1001First ? class1 : class2;
+                    const secondClass = interleave1001First ? class2 : class1;
+                    
+                    const interleaved = [];
+                    let i = 0, j = 0;
+                    while (i < firstClass.length || j < secondClass.length) {
+                        if (i < firstClass.length) interleaved.push(firstClass[i++]);
+                        if (j < secondClass.length) interleaved.push(secondClass[j++]);
+                    }
+                    unk.forEach(p => interleaved.push(p));
+                    
+                    newOrder.push(...interleaved);
+                });
+                
+                interleave1001First = !interleave1001First; // Toggle for next click
+                
+                presentations = newOrder;
+                savePresentations(presentations);
+                renderBoard();
+            }
+        });
+    }
 
 
 
