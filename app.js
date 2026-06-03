@@ -283,9 +283,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         // (Drag and sequence change logic removed to prevent accidental reordering)
-        
-        return div;
-    }
 
         // Edit button click -> Open Modal
         div.querySelector('.edit-btn').addEventListener('click', (e) => {
