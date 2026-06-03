@@ -1070,7 +1070,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Interleave Logic ---
-    const btnInterleave = document.getElementById('btn-interleave');
     let interleave1001First = true;
     if (btnInterleave) {
         btnInterleave.addEventListener('click', () => {
