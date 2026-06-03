@@ -527,7 +527,7 @@ const mockPresentations = [
 function getPresentations() {
   const stored = localStorage.getItem('presentations');
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v19";
+  const currentMockHash = "v20";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
@@ -570,7 +570,7 @@ function savePresentations(data) {
 
 function getPublishedPresentations() {
   const storedMockHash = localStorage.getItem('mockPresentationsHash');
-  const currentMockHash = "v19";
+  const currentMockHash = "v20";
 
   if (storedMockHash !== currentMockHash) {
       localStorage.removeItem('published_presentations');
@@ -660,16 +660,7 @@ function fetchFeedbacksRemote() {
         });
 }
 
-// override saveFeedback to also post
-const originalSaveFeedback = saveFeedback;
-saveFeedback = function(feedback) {
-    originalSaveFeedback(feedback);
-    fetch(GAS_URL, {
-        method: 'POST',
-        body: JSON.stringify({ action: 'submit', ...feedback }),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-    }).catch(console.error);
-};
+// (saveFeedback override removed because it caused double POST requests)
 
 function likeFeedbackRemote(id, studentName) {
     fetch(GAS_URL, {
