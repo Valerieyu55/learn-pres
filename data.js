@@ -530,30 +530,45 @@ function getPresentations() {
   const currentMockHash = "v24";
 
   if (storedMockHash !== currentMockHash) {
-      localStorage.removeItem('published_presentations');
       let oldPres = [];
       if (stored) {
           try { oldPres = JSON.parse(stored); } catch(e) {}
       }
-      
-      // Merge teacher's edits (status, score, comment, timeSpent) into the new mock data
-      const merged = mockPresentations.map(newP => {
-          const oldP = oldPres.find(p => p.id === newP.id);
-          if (oldP && (oldP.status !== 'unfilled' || oldP.score || oldP.comment || oldP.timeSpent)) {
-              return {
-                  ...newP,
-                  status: oldP.status || newP.status,
-                  score: oldP.score || newP.score,
-                  comment: oldP.comment || newP.comment,
-                  timeSpent: oldP.timeSpent || newP.timeSpent
-              };
-          }
-          return newP;
-      });
 
-      localStorage.setItem('mockPresentationsHash', currentMockHash);
-      localStorage.setItem('presentations', JSON.stringify(merged));
-      return merged;
+      if (oldPres.length > 0) {
+          // ✅ PRESERVE the saved order: update fields but keep positions
+          const merged = oldPres.map(oldP => {
+              const newP = mockPresentations.find(p => p.id === oldP.id);
+              if (newP) {
+                  // Keep all teacher-edited fields, update topic/presenters/category from mock
+                  return {
+                      ...newP,
+                      session: oldP.session,
+                      status: oldP.status,
+                      score: oldP.score,
+                      comment: oldP.comment,
+                      timeSpent: oldP.timeSpent,
+                      isRecommended: oldP.isRecommended
+                  };
+              }
+              return oldP; // keep entries not in new mock (edge case)
+          });
+          // Add any brand-new entries from mock that don't exist yet
+          mockPresentations.forEach(newP => {
+              if (!merged.find(p => p.id === newP.id)) {
+                  merged.push(newP);
+              }
+          });
+
+          localStorage.setItem('mockPresentationsHash', currentMockHash);
+          localStorage.setItem('presentations', JSON.stringify(merged));
+          return merged;
+      } else {
+          // First time: load from mock
+          localStorage.setItem('mockPresentationsHash', currentMockHash);
+          localStorage.setItem('presentations', JSON.stringify(mockPresentations));
+          return mockPresentations;
+      }
   }
 
   if (stored) {
