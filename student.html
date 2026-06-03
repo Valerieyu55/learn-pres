@@ -12,13 +12,18 @@
             --primary: #2F3A4A;         /* 深藍灰主色 */
             --secondary: #A8B8A0;       /* 鼠尾草綠輔助色 */
             --accent: #C89F7A;          /* 焦糖色強調色 */
+            --danger: #C96F5C;          /* 警示色 */
             --surface: #FFFFFF;         /* 卡片白色背景 */
             --border: #E6DED3;          /* 柔和邊框 */
             --text-dark: #2F3A4A;
             --text-muted: #7E8B9B;
             --text-light: #FFFFFF;
+            --radius-sm: 6px;
             --radius-md: 10px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 2px 4px rgba(47, 58, 74, 0.04);
             --shadow-md: 0 6px 12px rgba(47, 58, 74, 0.06);
+            --shadow-lg: 0 12px 24px rgba(47, 58, 74, 0.08);
         }
 
         * {
@@ -45,43 +50,175 @@
             gap: 1.5rem;
         }
 
-        .header {
-            background-color: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            padding: 1.5rem 2rem;
+        .hero-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e2836 100%);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2.5rem;
+            color: var(--text-light);
+            box-shadow: var(--shadow-lg);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow-md);
+            flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
         }
 
-        .header-title h1 {
-            font-size: 1.5rem;
-            color: var(--primary);
+        .hero-card::after {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(200, 159, 122, 0.15) 0%, rgba(200, 159, 122, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-title h1 {
+            font-size: 1.8rem;
             font-weight: 700;
+            margin: 0;
+            letter-spacing: 0.5px;
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            color: var(--text-light);
         }
 
-        .header-title p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .student-badge {
-            font-size: 0.85rem;
-            color: var(--primary);
-            background-color: var(--bg-main);
-            padding: 0.5rem 1rem;
+        .hero-badge {
+            background: rgba(200, 159, 122, 0.2);
+            color: var(--accent);
+            border: 1px solid rgba(200, 159, 122, 0.3);
+            padding: 0.4rem 1rem;
             border-radius: 20px;
-            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
+            gap: 6px;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--secondary);
+            line-height: 1.6;
+            margin: 0;
+            max-width: 800px;
+        }
+
+        .reminder-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .reminder-card {
+            background-color: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 4px solid transparent;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .reminder-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .reminder-card.warning {
+            border-left-color: var(--accent);
+        }
+
+        .reminder-card.danger {
+            border-left-color: var(--danger);
+        }
+
+        .reminder-icon {
+            font-size: 1.25rem;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        .reminder-card.warning .reminder-icon {
+            color: var(--accent);
+            background: #FDF8F3;
+        }
+
+        .reminder-card.danger .reminder-icon {
+            color: var(--danger);
+            background: #FEF2F2;
+        }
+
+        .reminder-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .reminder-text h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .reminder-card.warning h4 {
+            color: #b58150;
+        }
+
+        .reminder-card.danger h4 {
+            color: var(--danger);
+        }
+
+        .reminder-text p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .reminder-text a {
+            color: var(--text-dark);
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            margin-left: 4px;
+            transition: color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .reminder-text a:hover {
+            color: var(--primary);
+        }
+
+        .reminder-card.warning a {
+            color: var(--accent);
+        }
+
+        .reminder-card.danger a {
+            color: var(--danger);
         }
 
         .rule-banner {
@@ -430,40 +567,54 @@
             align-items: flex-start;
             gap: 6px;
         }
+
+        @media (max-width: 850px) {
+            .reminder-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-card {
+                padding: 1.5rem;
+            }
+            
+            .hero-title h1 {
+                font-size: 1.4rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <div class="header-title">
-                <h1><i class="fa-solid fa-graduation-cap"></i> 自主學習成果發表 - 學生即時回饋系統</h1>
-                <p>請聆聽同儕的自主學習報告，並寫下對你最有收穫的內容與回饋</p>
+        <header class="hero-card">
+            <div style="z-index: 1;">
+                <div class="hero-title">
+                    <h1><i class="fa-solid fa-graduation-cap"></i> 自主學習成果發表</h1>
+                    <span class="hero-badge"><i class="fa-solid fa-users"></i> 學生即時回饋端</span>
+                </div>
+                <p class="hero-subtitle" style="margin-top: 0.5rem;">請聆聽同儕的自主學習報告，並寫下對你最有收穫的內容與回饋</p>
             </div>
-            <span class="student-badge"><i class="fa-solid fa-users"></i> 同儕聽眾端</span>
+            
+            <div class="reminder-grid" style="z-index: 1; margin-bottom: 0;">
+                <div class="reminder-card warning">
+                    <div class="reminder-icon"><i class="fa-solid fa-bullhorn"></i></div>
+                    <div class="reminder-text">
+                        <h4>上傳您的報告檔案</h4>
+                        <p>準備報告的同學，上台前請上傳簡報：<br><a href="https://drive.google.com/drive/folders/1D1YVPAB0pvEJiRB_ExYAksGdLibMFafV?usp=sharing" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> 點我前往 Google Drive</a></p>
+                    </div>
+                </div>
+
+                <div class="reminder-card danger">
+                    <div class="reminder-icon"><i class="fa-solid fa-clipboard-check"></i></div>
+                    <div class="reminder-text">
+                        <h4>填寫自主學習問卷</h4>
+                        <p>所有同學請依班級完成自我評估 (必交)：<br>
+                            <a href="https://forms.gle/oVpUWG5T91J7tLjR8" target="_blank"><i class="fa-solid fa-pen"></i> 1001班</a>
+                            <a href="https://forms.gle/2MZ7sWWQaqKcsij26" target="_blank"><i class="fa-solid fa-pen"></i> 1002班</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
         </header>
-
-        <div style="background-color: #FDF8F3; border: 1px solid #C89F7A; border-radius: 8px; padding: 12px 16px; margin-bottom: 1rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(200, 159, 122, 0.1);">
-            <i class="fa-solid fa-bullhorn" style="color: #D97706; font-size: 1.25rem;"></i>
-            <div style="flex: 1;">
-                <h4 style="margin: 0 0 4px 0; color: var(--primary); font-size: 0.95rem;">重要提醒：上傳您的報告檔案！</h4>
-                <p style="margin: 0; color: var(--text-dark); font-size: 0.85rem;">
-                    準備報告的同學，請務必於上台前將您的簡報檔案上傳至指定資料夾：
-                    <a href="https://drive.google.com/drive/folders/1D1YVPAB0pvEJiRB_ExYAksGdLibMFafV?usp=sharing" target="_blank" style="color: var(--accent); font-weight: bold; text-decoration: underline; margin-left: 4px;">點我前往 Google Drive 上傳區</a>
-                </p>
-            </div>
-        </div>
-
-        <div style="background-color: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 8px; padding: 12px 16px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 4px rgba(239, 68, 68, 0.1);">
-            <i class="fa-solid fa-clipboard-check" style="color: #EF4444; font-size: 1.25rem;"></i>
-            <div style="flex: 1;">
-                <h4 style="margin: 0 0 4px 0; color: #B91C1C; font-size: 0.95rem;">必填提醒：填寫 114-2 自主學習問卷！</h4>
-                <p style="margin: 0; color: #7F1D1D; font-size: 0.85rem;">
-                    所有同學請務必在活動結束前依據您的班級完成自我評估，此為必交項目：
-                    <a href="https://forms.gle/oVpUWG5T91J7tLjR8" target="_blank" style="color: #DC2626; font-weight: bold; text-decoration: underline; margin-left: 4px; margin-right: 12px;"><i class="fa-solid fa-pen"></i> 1001班問卷</a>
-                    <a href="https://forms.gle/2MZ7sWWQaqKcsij26" target="_blank" style="color: #DC2626; font-weight: bold; text-decoration: underline;"><i class="fa-solid fa-pen"></i> 1002班問卷</a>
-                </p>
-            </div>
-        </div>
 
         <div class="student-tabs">
             <button class="student-tab active" data-target="schedule-view">
